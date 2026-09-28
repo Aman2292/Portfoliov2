@@ -1,0 +1,446 @@
+/*
+ * Layered on top of webflow.css:
+ *  - interaction states the Webflow runtime used to drive with JS (hovers, marquees, pulses)
+ *  - replacements for Webflow's #w-node grid-placement ids
+ *  - resets for elements that became real <button>s
+ */
+
+:root {
+  --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* next/image writes width/height attributes; keep the aspect ratio when CSS only sets a width. */
+img {
+  height: auto;
+}
+
+:focus-visible {
+  outline: 2px solid var(--_colors---primary--accent);
+  outline-offset: 3px;
+}
+
+::selection {
+  background-color: var(--_colors---primary--accent);
+  color: var(--_colors---primary--white);
+}
+
+/* ---------- Buttons that replaced clickable divs ---------- */
+
+.hamburger,
+.menu_close,
+.faq_question-wrap,
+.home-header_contact-texts {
+  font: inherit;
+  color: inherit;
+  border: 0;
+  padding: 0;
+}
+
+.hamburger,
+.faq_question-wrap,
+.home-header_contact-texts {
+  background: none;
+}
+
+.faq_question-wrap {
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+}
+
+.home-header_contact-texts {
+  text-align: left;
+}
+
+.hamburger_line,
+.faq_button-line {
+  display: block;
+}
+
+/* ---------- Grid placement (was #w-node-* ids) ---------- */
+
+.is-justify-center {
+  justify-self: center;
+}
+
+.is-justify-end {
+  justify-self: end;
+}
+
+.is-grid-col-2 {
+  grid-area: 1 / 2 / 2 / 3;
+}
+
+.is-span-rows {
+  grid-area: span 2 / span 1 / span 2 / span 1;
+}
+
+.testimonials_cover.is-featured {
+  grid-area: 1 / 1 / 3 / 2;
+}
+
+.blog-list_button {
+  place-self: end;
+}
+
+.footer_legal-wrap,
+.footer_template-links {
+  align-self: end;
+}
+
+/* ---------- Preloader ---------- */
+
+/* Visible from first paint; the Preloader component animates it away. Failsafe if JS never runs. */
+.brand_wrap {
+  display: flex;
+  animation: preloader-failsafe 0s linear 4s forwards;
+}
+
+@keyframes preloader-failsafe {
+  to {
+    visibility: hidden;
+  }
+}
+
+/* ---------- Rolling link labels + accent dots ---------- */
+
+.navbar_link-text,
+.menu_link-text {
+  transition: transform 0.6s var(--ease-out-expo);
+}
+
+.navbar_link:hover .navbar_link-text,
+.navbar_link:focus-visible .navbar_link-text,
+.menu_link:hover .menu_link-text,
+.menu_link:focus-visible .menu_link-text {
+  transform: translateY(-100%);
+}
+
+.navbar_link-dot,
+.menu_link-dot {
+  transform: scale(0);
+  transition:
+    transform 0.4s var(--ease-out-expo),
+    opacity 0.4s ease;
+}
+
+.navbar_link:hover .navbar_link-dot,
+.navbar_link:focus-visible .navbar_link-dot,
+.menu_link:hover .menu_link-dot,
+.menu_link:focus-visible .menu_link-dot {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.menu_legal-line {
+  transition: transform 0.5s var(--ease-out-expo);
+}
+
+.menu_legal-link:hover .menu_legal-line,
+.menu_legal-link:focus-visible .menu_legal-line {
+  transform: translateX(100.4%);
+}
+
+/* ---------- Pill buttons: blurred label roll + pulsing dot ---------- */
+
+.button_text {
+  transition:
+    transform 0.6s var(--ease-out-expo),
+    filter 0.6s ease,
+    opacity 0.6s ease;
+}
+
+.button_text._2 {
+  filter: blur(5px);
+}
+
+.button-secondary:hover .button_text,
+.button-secondary:focus-visible .button_text {
+  transform: translateY(-100%);
+}
+
+.button-secondary:hover .button_text._1,
+.button-secondary:focus-visible .button_text._1 {
+  opacity: 0;
+  filter: blur(5px);
+}
+
+.button-secondary:hover .button_text._2,
+.button-secondary:focus-visible .button_text._2 {
+  opacity: 1;
+  filter: blur(0);
+}
+
+.button_dot-scale {
+  display: block;
+  transform: scale(0);
+}
+
+.button-secondary:hover .button_dot-scale,
+.button-secondary:focus-visible .button_dot-scale {
+  animation: dot-pulse 1.2s ease-out infinite;
+}
+
+.home-header_contact-dot-scale {
+  display: block;
+  animation: dot-pulse 2s ease-out infinite;
+}
+
+@keyframes dot-pulse {
+  from {
+    transform: scale(0);
+    opacity: 1;
+  }
+  to {
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+
+/* ---------- Gradient buttons (pricing) ---------- */
+
+.button-grad_gradient {
+  opacity: 0.1;
+  transition: opacity 0.4s ease;
+}
+
+.button-gradient:hover .button-grad_gradient,
+.button-gradient:focus-visible .button-grad_gradient {
+  opacity: 0.6;
+}
+
+.button-grad_ball.ball-1 {
+  animation: grad-ball-1 6s ease-in-out infinite alternate;
+}
+
+.button-grad_ball.gradient__ball--2 {
+  animation: grad-ball-2 7s ease-in-out infinite alternate;
+}
+
+@keyframes grad-ball-1 {
+  from {
+    transform: translate(0, 0) scale(1);
+  }
+  to {
+    transform: translate(100%, -20%) scale(1.1);
+  }
+}
+
+@keyframes grad-ball-2 {
+  from {
+    transform: translate(0, -14%) scale(1);
+  }
+  to {
+    transform: translate(-100%, 0) scale(1.15);
+  }
+}
+
+/* ---------- Marquees ---------- */
+
+.note-marquee_text {
+  animation: marquee 6s linear infinite;
+}
+
+.brands_list {
+  animation: marquee 45s linear infinite;
+}
+
+@keyframes marquee {
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+/* ---------- Hero ---------- */
+
+/* Contact details stay collapsed until the card is hovered / toggled (HeroContactCard). */
+.home-header_infos {
+  display: block;
+  height: 0;
+  opacity: 0;
+  overflow: hidden;
+}
+
+/* ---------- Work list cursor pill ---------- */
+
+@media (min-width: 992px) and (hover: hover) and (pointer: fine) {
+  .hover_wrap {
+    display: flex;
+  }
+}
+
+.hover_pill {
+  opacity: 0;
+}
+
+.hover_text-wrap {
+  width: 0;
+  overflow: hidden;
+}
+
+.hover_text {
+  opacity: 0;
+}
+
+/* ---------- Why us grid ---------- */
+
+.home-grid_circle-1,
+.home-grid_member-in {
+  animation: spin 60s linear infinite;
+}
+
+/* Counter-rotate the avatars so they stay upright while the rings turn. */
+.home-grid_member,
+.home-grid_circle-2 {
+  animation: spin 60s linear infinite reverse;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.chat_message.is-reply {
+  background-color: var(--_colors---primary--black);
+  color: var(--_colors---primary--white);
+  transform-origin: 100% 100%;
+}
+
+/* ---------- Showreel ---------- */
+
+a.showreel_lightbox {
+  color: inherit;
+}
+
+/* Final (full-screen) frame; Showreel animates into it on scroll. */
+@media (min-width: 992px) {
+  .showreel_lightbox {
+    padding: 1.5rem;
+  }
+
+  .showreel_img-wrap {
+    border-radius: 2rem;
+  }
+}
+
+.video-modal {
+  width: 100vw;
+  max-width: none;
+  height: 100dvh;
+  max-height: none;
+  margin: 0;
+  padding: 5rem 1.5rem;
+  border: 0;
+  background: transparent;
+  overflow: hidden;
+}
+
+.video-modal[open] {
+  display: grid;
+  place-items: center;
+}
+
+.video-modal::backdrop {
+  background-color: #000000d9;
+  backdrop-filter: blur(12px);
+}
+
+.video-modal_frame {
+  width: min(100%, 75rem, calc((100dvh - 10rem) * 16 / 9));
+  aspect-ratio: 16 / 9;
+  border-radius: var(--border-radius--xlarge);
+  background-color: var(--_colors---primary--black);
+  overflow: hidden;
+}
+
+.video-modal_frame iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* ---------- Testimonials counters ---------- */
+
+/* Digit columns rest on their final value; ScrollAnimations rolls them up from the first digit. */
+.number_others.is-final {
+  transform: translateY(-100%);
+}
+
+/* ---------- FAQ accordion ---------- */
+
+.faq_accordion {
+  cursor: default;
+}
+
+.faq_answer-wrap {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.6s var(--ease-out-expo);
+}
+
+.faq_accordion.is-open .faq_answer-wrap {
+  grid-template-rows: 1fr;
+}
+
+.faq_answer-inner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.faq_button {
+  position: relative;
+}
+
+.faq_button-line.is-second {
+  transition: transform 0.4s var(--ease-out-expo);
+}
+
+.faq_accordion.is-open .faq_button-line.is-second {
+  transform: rotate(0deg);
+}
+
+/* ---------- Blog ---------- */
+
+.blog-list_img {
+  transition: transform 0.8s var(--ease-out-expo);
+}
+
+.blog-list_block:hover .blog-list_img,
+.blog-list_block:focus-visible .blog-list_img {
+  transform: scale(1.06);
+}
+
+/* ---------- Footer newsletter ---------- */
+
+.w-form-done.is-visible,
+.w-form-fail.is-visible {
+  display: block;
+}
+
+/* ---------- Reduced motion ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .brand_wrap {
+    display: none;
+  }
+
+  .note-marquee_text,
+  .brands_list,
+  .home-grid_circle-1,
+  .home-grid_circle-2,
+  .home-grid_member,
+  .home-grid_member-in,
+  .button-grad_ball,
+  .home-header_contact-dot-scale,
+  .button-secondary:hover .button_dot-scale {
+    animation: none;
+  }
+}
