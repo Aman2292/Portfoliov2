@@ -1,11 +1,13 @@
 "use client";
 
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState, type MouseEvent } from "react";
 import { useLenis } from "lenis/react";
-import { menu, navLinks, socials } from "@/content/site";
+import { menu, socials } from "@/content/site";
 import { Button } from "@/components/ui/Button";
 import { RollingLink } from "@/components/ui/RollingLink";
+import { SmartLink } from "@/components/ui/SmartLink";
 import { EASE_OUT, gsap, useGSAP } from "@/lib/gsap";
 import { externalProps } from "@/lib/utils";
 
@@ -16,6 +18,7 @@ export function Menu() {
   const timeline = useRef<gsap.core.Timeline | null>(null);
   const wasOpen = useRef(false);
   const lenis = useLenis();
+  const pathname = usePathname();
 
   useGSAP(
     () => {
@@ -83,8 +86,8 @@ export function Menu() {
         <div className="menu_in">
           <div className="menu_content">
             <div className="menu_links" data-menu-item>
-              {navLinks.map((link) => (
-                <RollingLink key={link.href} href={link.href} label={link.label} variant="menu" />
+              {menu.links.map((link) => (
+                <RollingLink key={link.href} href={link.href} label={link.label} variant="menu" current={pathname === link.href} />
               ))}
             </div>
 
@@ -112,13 +115,13 @@ export function Menu() {
                 </div>
               </div>
 
-              <a href={menu.contactCard.href} className="menu_contact w-inline-block" data-menu-item>
+              <SmartLink href={menu.contactCard.href} className="menu_contact w-inline-block" data-menu-item>
                 <Image src={menu.contactCard.image} alt="" className="menu_contact-img" sizes="(max-width: 991px) 100vw, 50vw" />
                 <div className="menu-contact-link">
                   <div className="menu_contact-text">{menu.contactCard.label}</div>
                   <img src="/icons/arrow-up-right.svg" alt="" className="menu_contact-arrow" />
                 </div>
-              </a>
+              </SmartLink>
 
               <div className="menu_legal" data-menu-item>
                 {menu.bottomLinks.map((link) => (

@@ -1,7 +1,7 @@
 import { Fragment } from "react";
 import { brand, footer, socials } from "@/content/site";
 import { externalProps } from "@/lib/utils";
-import { Newsletter } from "./Newsletter";
+import { SmartLink } from "@/components/ui/SmartLink";
 
 export function Footer() {
   const year = new Date().getFullYear();
@@ -19,9 +19,9 @@ export function Footer() {
                     {footer.pageColumns.map((column, i) => (
                       <div key={i} className="footer_links-list">
                         {column.map((link) => (
-                          <a key={link.label} href={link.href} className="footer_link">
+                          <SmartLink key={link.label} href={link.href} className="footer_link">
                             {link.label}
-                          </a>
+                          </SmartLink>
                         ))}
                       </div>
                     ))}
@@ -43,7 +43,12 @@ export function Footer() {
                     </a>
                   ))}
                 </div>
-                <Newsletter />
+                <div className="footer_contact">
+                  <div className="field-label">{footer.contact.label}</div>
+                  <a href={`mailto:${footer.contact.email}`} className="footer_email">
+                    {footer.contact.email}
+                  </a>
+                </div>
               </div>
             </div>
 
@@ -76,7 +81,6 @@ export function Footer() {
 
           <div className="footer_brand" aria-hidden="true">
             {brand.name}
-            <span className="footer_mark">{brand.mark}</span>
           </div>
         </div>
       </div>

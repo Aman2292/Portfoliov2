@@ -1,4 +1,4 @@
-import type { MouseEventHandler } from "react";
+import { SmartLink } from "./SmartLink";
 
 // Spelled out in full (not built from a prefix) so the class names stay searchable.
 const CLASSES = {
@@ -12,17 +12,18 @@ export function RollingLink({
   label,
   variant,
   dot = true,
-  onClick,
+  current,
 }: {
   href: string;
   label: string;
   variant: keyof typeof CLASSES;
   dot?: boolean;
-  onClick?: MouseEventHandler<HTMLAnchorElement>;
+  /** Marks the link as the page being viewed (keeps the accent dot visible). */
+  current?: boolean;
 }) {
   const c = CLASSES[variant];
   return (
-    <a href={href} className={`${c.link} w-inline-block`} onClick={onClick}>
+    <SmartLink href={href} className={`${c.link} w-inline-block`} aria-current={current ? "page" : undefined}>
       <div className={c.texts}>
         <div className={`${c.text} _1`}>{label}</div>
         <div className={`${c.text} _2`} aria-hidden="true">
@@ -30,6 +31,6 @@ export function RollingLink({
         </div>
       </div>
       {dot && <div className={c.dot} />}
-    </a>
+    </SmartLink>
   );
 }

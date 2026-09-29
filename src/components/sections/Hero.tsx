@@ -1,4 +1,4 @@
-import { brand, hero } from "@/content/site";
+import { hero } from "@/content/site";
 import { BackgroundVideo } from "@/components/ui/BackgroundVideo";
 import { NoteMarquee } from "@/components/ui/NoteMarquee";
 import { HeroContactCard } from "./HeroContactCard";
@@ -14,7 +14,6 @@ export function Hero() {
         <div className="home-header_headings">
           <h1 className="home-header_heading" data-intro>
             {hero.title}
-            <span className="home-header_mark">{brand.mark}</span>
           </h1>
           <h2 className="home-header_heading" data-intro>
             {hero.subtitle}
@@ -42,7 +41,6 @@ export function Hero() {
             <div className="home-header_subheading">
               <div className="home-header_label">
                 {hero.label}
-                <sup className="home-header_mark-2">{brand.mark}</sup>
               </div>
               <div className="spacer-xsmall" />
               <h3 className="home-header_subhead">{hero.subhead}</h3>

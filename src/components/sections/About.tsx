@@ -1,7 +1,8 @@
-import { about, brand } from "@/content/site";
+import { about } from "@/content/site";
 import { BackgroundVideo } from "@/components/ui/BackgroundVideo";
 import { Button } from "@/components/ui/Button";
 import { Label } from "@/components/ui/Label";
+import { Wordmark } from "@/components/ui/Wordmark";
 
 export function About() {
   return (
@@ -18,7 +19,7 @@ export function About() {
                 <div className="home-about_title">{about.role}</div>
               </div>
             </div>
-            <img src={brand.logoLight} loading="lazy" alt={brand.name} width={142} height={37} className="home-about_logo" />
+            <Wordmark className="home-about_logo" />
           </div>
 
           <div className="home-about_content-wrap">
@@ -35,10 +36,12 @@ export function About() {
                 </div>
               </div>
               <div className="spacer-large is-tablet-smaller" />
-              <div className="fade-in" data-reveal>
-                <Button href={about.cta.href} variant="black">
-                  {about.cta.label}
-                </Button>
+              <div className="fade-in button-row" data-reveal>
+                {about.buttons.map((button, i) => (
+                  <Button key={button.href} href={button.href} variant={i === 0 ? "black" : "grey"}>
+                    {button.label}
+                  </Button>
+                ))}
               </div>
             </div>
           </div>

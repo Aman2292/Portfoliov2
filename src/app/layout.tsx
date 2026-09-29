@@ -1,7 +1,12 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
+import { Footer } from "@/components/layout/Footer";
+import { Navbar } from "@/components/layout/Navbar";
+import { Preloader } from "@/components/layout/Preloader";
+import { ProgressiveBlur } from "@/components/layout/ProgressiveBlur";
+import { ScrollAnimations } from "@/components/ScrollAnimations";
 import { SmoothScroll } from "@/components/SmoothScroll";
-import { meta } from "@/content/site";
+import { brand, meta } from "@/content/site";
 import "lenis/dist/lenis.css";
 import "@/styles/webflow.css";
 import "@/styles/custom.css";
@@ -28,7 +33,7 @@ const robotoMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: meta.title,
+  title: { default: meta.title, template: `%s — ${brand.name}` },
   description: meta.description,
   openGraph: { title: meta.title, description: meta.description, type: "website" },
   twitter: { card: "summary_large_image", title: meta.title, description: meta.description },
@@ -42,7 +47,16 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${inter.variable} ${bdoGrotesk.variable} ${robotoMono.variable}`}>
       <body>
-        <SmoothScroll>{children}</SmoothScroll>
+        <SmoothScroll>
+          <Preloader />
+          <div className="page-wrapper">
+            <Navbar />
+            <ProgressiveBlur />
+            <main className="main-wrapper">{children}</main>
+            <Footer />
+          </div>
+          <ScrollAnimations />
+        </SmoothScroll>
       </body>
     </html>
   );

@@ -2,8 +2,9 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useLenis } from "lenis/react";
-import { brand } from "@/content/site";
+import { Wordmark } from "@/components/ui/Wordmark";
 import { EASE_IN_OUT, EASE_OUT, gsap, prefersReducedMotion, useGSAP } from "@/lib/gsap";
+import { markIntroDone } from "@/lib/intro";
 
 /**
  * Intro curtain: the logo fades in, then the curtain lifts (dragging its striped edge along)
@@ -31,24 +32,27 @@ export function Preloader() {
       if (prefersReducedMotion()) {
         gsap.set(curtain, { display: "none" });
         setDone(true);
+        markIntroDone();
         return;
       }
 
-      const intro = document.querySelectorAll("[data-intro]");
-      gsap
+      const timeline = gsap
         .timeline({ onComplete: () => setDone(true) })
         .from(".brand_logo", { yPercent: 60, opacity: 0, duration: 0.8, ease: EASE_OUT })
         .to(".brand_logo", { yPercent: -60, opacity: 0, duration: 0.5, ease: "expo.in" }, "+=0.2")
         .to(curtain, { height: 0, y: "-20vh", duration: 1.1, ease: EASE_IN_OUT }, "-=0.15")
         .set(curtain, { display: "none" })
-        .from(intro, { y: "3rem", opacity: 0, duration: 1.2, stagger: 0.1, ease: EASE_OUT }, "-=0.55");
+        .call(markIntroDone);
+      // Only the home hero has intro elements.
+      const intro = document.querySelectorAll("[data-intro]");
+      if (intro.length) timeline.from(intro, { y: "3rem", opacity: 0, duration: 1.2, stagger: 0.1, ease: EASE_OUT }, "-=0.55");
     },
     { scope: ref },
   );
 
   return (
     <div className="brand_wrap" ref={ref} aria-hidden="true">
-      <img src={brand.logoLight} alt="" width={142} height={37} className="brand_logo" />
+      <Wordmark className="brand_logo" />
       <img src="/brand/curtain-lines.png" alt="" className="brand_lines" />
     </div>
   );

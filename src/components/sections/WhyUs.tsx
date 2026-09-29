@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/Button";
 import { Label } from "@/components/ui/Label";
 
 export function WhyUs() {
-  const { team, chat, pricing } = whyUs;
+  const { team, chat, process: processCard } = whyUs;
 
   return (
     <section id="why" className="section_home-grid">
@@ -63,14 +63,14 @@ export function WhyUs() {
 
           <div className="home-grid_pricing" data-reveal>
             <Image
-              src={pricing.image}
+              src={processCard.image}
               alt=""
               className="home-grid_pricing-img"
               sizes="(max-width: 479px) 80vw, (max-width: 991px) 60vw, 30vw"
             />
-            <h4 className="home-grid_pricing-title">{pricing.title}</h4>
-            <Button href={pricing.cta.href} variant="small">
-              {pricing.cta.label}
+            <h4 className="home-grid_pricing-title">{processCard.title}</h4>
+            <Button href={processCard.cta.href} variant="small">
+              {processCard.cta.label}
             </Button>
           </div>
         </div>

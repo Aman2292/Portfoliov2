@@ -1,7 +1,7 @@
 # Portfolio
 
-A one-page portfolio built with **Next.js 16** (App Router, TypeScript), ported from the *Alture* Webflow template.
-Smooth scrolling comes from [Lenis](https://lenis.darkroom.engineering/), and the Webflow interactions are rebuilt with [GSAP](https://gsap.com/) + ScrollTrigger.
+Personal developer portfolio built with **Next.js 16** (App Router, TypeScript), based on the *Alture* Webflow template.
+Smooth scrolling comes from [Lenis](https://lenis.darkroom.engineering/); animations use [GSAP](https://gsap.com/) + ScrollTrigger.
 
 ## Getting started
 
@@ -13,40 +13,55 @@ npm run start   # serve the production build
 npm run lint
 ```
 
+## Pages
+
+| Route | What's on it |
+| --- | --- |
+| `/` | Hero, selected work (one card per category), about teaser, what I do, contact |
+| `/applications`, `/websites`, `/shopify`, `/personal-projects` | Project grid for that category (one route per entry in `categories`) |
+| `/about` | Bio and portrait, toolbox strip, journey teaser |
+| `/journey` | Interactive timeline — pinned sideways scroll on desktop, vertical on phones — plus stats |
+
 ## Making it yours
 
-Almost everything you'll want to change lives in **`src/content/site.ts`**: names, copy, links, social profiles, projects, services, testimonials, pricing, FAQ, blog posts and the CTA email.
+Everything you'll want to change lives in **`src/content/site.ts`**:
 
-| What | Where |
+- `brand` — your name (used as the logo), role, email, GitHub/LinkedIn links
+- `projects` — add a project with `category: "applications" | "websites" | "shopify" | "personal-projects"`; it shows up on that page, in the counts, and gets its own page at `/<category>/<title>`. How it's demoed depends on what you give it:
+  - `screens: [...]` — **mobile apps** on an iPhone Pro Max: portrait screenshots, ideally 1320 × 2868 straight off the phone. On the project page visitors swipe between screens.
+  - `pages: [{ label, desktop, mobile? }]` — **websites** open on a MacBook (scroll the site inside the screen, tabs for each page); **Shopify stores** open in a theme-preview window with a desktop/mobile toggle. Use full-page screenshots: desktop ~1440px wide, mobile ~390px wide at 2× (Chrome DevTools → device toolbar → "Capture full size screenshot" does both).
+  - `image` — anything else is shown as a photo.
+  - `url` adds a "Visit live" / "View store" button; `domain` is what the address bar shows.
+- `aboutPage` — bio, quick facts and the toolbox
+- `journey.milestones` — your timeline, oldest first (the current entries are samples)
+- `hero`, `about`, `services`, `cta`, `footer` — the rest of the copy
+
+| Media | Where |
 | --- | --- |
-| Text, links, section data | `src/content/site.ts` |
-| Photos (optimised by `next/image`) | `src/assets/images/` (imported in `site.ts`) |
-| Logos, icons, partner logos | `public/brand/`, `public/icons/`, `public/partners/` |
+| Photos (optimised by `next/image`) | `src/assets/images/` (imported in `site.ts`) — replace `contact-portrait.webp` with your photo |
+| Icons | `public/icons/` |
 | Background videos | `public/videos/` |
 | Favicon / home-screen icon | `src/app/icon.png`, `src/app/apple-icon.png` |
-| Page title & description | `meta` in `src/content/site.ts` |
 
-Links starting with `#` scroll to a section on the page (`#work`, `#about`, `#contact`…). A bare `#` is a placeholder that does nothing — replace those with real URLs (case studies, articles, Behance, GitHub…).
-
-The footer newsletter posts to `footer.newsletter.endpoint` (e.g. a Formspree/Buttondown URL). If you leave it empty, submitting opens the visitor's mail app addressed to `brand.email`.
+Links: `/journey` opens a page, `#contact` scrolls to a section on the current page, `/#work` scrolls to a home-page section from anywhere, and a bare `#` is a placeholder that does nothing.
 
 ## How it's put together
 
 ```
 src/
-  app/                 layout (fonts, metadata), page (section order), icons, fonts/
+  app/                 root layout (navbar, footer, preloader), pages, fonts, icons
   content/site.ts      all site content
   components/
-    layout/            Navbar, Menu, Preloader, Footer, Newsletter, ProgressiveBlur
-    sections/          one file per page section (+ small client islands like FaqList, Showreel)
-    ui/                Button, Label, RollingLink, Odometer, BackgroundVideo, NoteMarquee
-    SmoothScroll.tsx   Lenis + GSAP ticker, in-page anchor scrolling
-    ScrollAnimations.tsx  scroll effects driven by data-* attributes
+    layout/            Navbar, NavLinks, Menu, Preloader, Footer, ProgressiveBlur
+    sections/          page sections (+ client islands such as JourneyTimeline, HeroContactCard, MouseTrail)
+    ui/                Button, Label, PageHeader, RollingLink, SmartLink, Wordmark, Odometer, BackgroundVideo…
+    SmoothScroll.tsx   Lenis + GSAP ticker, smooth in-page anchor scrolling
+    ScrollAnimations.tsx  scroll effects driven by data-* attributes (re-run on every page)
   styles/
     webflow.css        the template's stylesheet (trimmed to the classes used here)
-    custom.css         hover states, marquees, accordion, preloader and other additions
+    custom.css         hovers, marquees, pages added for the portfolio, journey timeline
 ```
 
 Sections are server components; only interactive pieces are client components.
-Scroll effects are declared in markup with attributes such as `data-reveal` (fade up), `data-line` (rule draws in) and `data-parallax="scale"` — see the comment at the top of `ScrollAnimations.tsx` for the full list.
+Scroll effects are declared in markup with attributes such as `data-reveal` (fade up), `data-line` (rule draws in) and `data-parallax="scale"` — see the top of `ScrollAnimations.tsx` for the full list.
 Everything renders in its final state without JavaScript, and animations are skipped for visitors who prefer reduced motion.

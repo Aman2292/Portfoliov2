@@ -1,5 +1,6 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { EASE_IN_OUT, EASE_OUT, gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
 
 const all = (selector: string) => gsap.utils.toArray<HTMLElement>(selector);
@@ -12,7 +13,6 @@ const all = (selector: string) => gsap.utils.toArray<HTMLElement>(selector);
  *   data-parallax="scale"  media settles from 1.2x to 1x while crossing the viewport
  *   data-work-card         project card tilts up and grows to full size as it scrolls in
  *   data-spin              icon rotates with scroll progress through its section
- *   data-bar               stat bar fills from the left
  *   data-odometer          digit column rolls up to its final value
  *   data-rotating-words    hero words cycle on a loop
  *   data-chat              chat bubbles (data-chat-step) pop in one after another
@@ -21,30 +21,37 @@ const all = (selector: string) => gsap.utils.toArray<HTMLElement>(selector);
  * so no-JS and reduced-motion visitors simply see the finished layout.
  */
 export function ScrollAnimations() {
-  useGSAP(() => {
-    const mm = gsap.matchMedia();
-    mm.add("(prefers-reduced-motion: no-preference)", () => {
-      reveals();
-      lines();
-      parallax();
-      workCards();
-      spinners();
-      bars();
-      odometers();
-      rotatingWords();
-      chats();
-    });
+  // Lives in the root layout, so rebuild everything whenever a new page is shown.
+  const pathname = usePathname();
 
-    // Font swaps can shift layout after triggers are measured.
-    document.fonts.ready.then(() => ScrollTrigger.refresh());
-  });
+  useGSAP(
+    () => {
+      const mm = gsap.matchMedia();
+      mm.add("(prefers-reduced-motion: no-preference)", () => {
+        reveals();
+        lines();
+        parallax();
+        workCards();
+        spinners();
+        odometers();
+        rotatingWords();
+        chats();
+      });
+
+      // Font swaps can shift layout after triggers are measured.
+      document.fonts.ready.then(() => ScrollTrigger.refresh());
+    },
+    { dependencies: [pathname], revertOnUpdate: true },
+  );
 
   return null;
 }
 
 function reveals() {
-  gsap.set("[data-reveal]", { y: "0.5rem", opacity: 0 });
-  ScrollTrigger.batch("[data-reveal]", {
+  const targets = all("[data-reveal]");
+  if (!targets.length) return;
+  gsap.set(targets, { y: "0.5rem", opacity: 0 });
+  ScrollTrigger.batch(targets, {
     start: "top 90%",
     once: true,
     onEnter: (batch) => gsap.to(batch, { y: 0, opacity: 1, duration: 1, ease: EASE_OUT, stagger: 0.1, overwrite: true }),
@@ -98,17 +105,6 @@ function spinners() {
   );
 }
 
-function bars() {
-  all("[data-bar]").forEach((bar) =>
-    gsap.from(bar, {
-      scaleX: 0,
-      transformOrigin: "left center",
-      duration: 1.6,
-      ease: EASE_IN_OUT,
-      scrollTrigger: { trigger: bar, start: "top 95%", once: true },
-    }),
-  );
-}
 
 function odometers() {
   all(".number_wrap").forEach((counter) => {

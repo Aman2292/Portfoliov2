@@ -1,6 +1,8 @@
-import { brand, navLinks } from "@/content/site";
-import { RollingLink } from "@/components/ui/RollingLink";
+import Link from "next/link";
+import { brand } from "@/content/site";
+import { Wordmark } from "@/components/ui/Wordmark";
 import { Menu } from "./Menu";
+import { NavLinks } from "./NavLinks";
 
 export function Navbar() {
   return (
@@ -9,9 +11,9 @@ export function Navbar() {
         <div className="navbar_component">
           <div className="navbar_content">
             <div className="navbar_brand">
-              <a href="#top" className="navbar_logo-wrap w-inline-block" aria-label={`${brand.name} — back to top`}>
-                <img src={brand.logoDark} alt="" width={142} height={37} className="navbar_logo" />
-              </a>
+              <Link href="/" className="navbar_logo-wrap w-inline-block" aria-label={`${brand.name} — home`}>
+                <Wordmark className="navbar_wordmark" />
+              </Link>
               <div className="navbar_creative">
                 <img src="/brand/barcode.svg" alt="" width={183} height={86} className="navbar_barcode" />
                 <div className="navbar_creative-text">{brand.tagline}</div>
@@ -19,20 +21,7 @@ export function Navbar() {
             </div>
 
             <div className="navbar_links-menu">
-              <div className="navbar_links">
-                {navLinks.map((link) =>
-                  link.badge ? (
-                    <div key={link.href} className="navbar_works-link">
-                      <RollingLink href={link.href} label={link.label} variant="navbar" dot={false} />
-                      <div className="navbar_works-number-wrap" aria-hidden="true">
-                        <div className="navbar_works-number">{link.badge}</div>
-                      </div>
-                    </div>
-                  ) : (
-                    <RollingLink key={link.href} href={link.href} label={link.label} variant="navbar" />
-                  ),
-                )}
-              </div>
+              <NavLinks />
               <Menu />
             </div>
           </div>

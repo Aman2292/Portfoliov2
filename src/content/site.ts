@@ -2,7 +2,11 @@
  * All copy, links and media for the site live here.
  * Swap these values to personalise the portfolio — components read from this file only.
  *
- * Links that start with "#" scroll to a section on the page ("#" alone is a placeholder that does nothing).
+ * Links: "/applications" opens a page, "#contact" scrolls to a section on the current page,
+ * "/#work" scrolls to a home-page section from anywhere, and "#" alone is a placeholder that does nothing.
+ *
+ * Still to personalise: brand.email, the LinkedIn/X links, your photo (contact-portrait.webp),
+ * the projects list, the toolbox and the journey milestones (those are sample entries).
  */
 import type { StaticImageData } from "next/image";
 
@@ -11,6 +15,12 @@ import menuContact from "@/assets/images/menu-contact.png";
 import bronx from "@/assets/images/work/bronx.webp";
 import nexora from "@/assets/images/work/nexora.webp";
 import carlo from "@/assets/images/work/carlo.webp";
+import webDesign from "@/assets/images/services/web-design.jpg";
+import branding from "@/assets/images/services/branding.webp";
+import contentImg from "@/assets/images/services/content.jpg";
+import socialMedia from "@/assets/images/services/social-media.jpg";
+import showreel from "@/assets/images/showreel.png";
+import glass from "@/assets/images/glass.webp";
 import member1 from "@/assets/images/team/member-1.webp";
 import member2 from "@/assets/images/team/member-2.webp";
 import member3 from "@/assets/images/team/member-3.webp";
@@ -19,18 +29,20 @@ import member5 from "@/assets/images/team/member-5.webp";
 import member6 from "@/assets/images/team/member-6.webp";
 import member7 from "@/assets/images/team/member-7.webp";
 import avatarClient from "@/assets/images/team/avatar-client.webp";
-import glass from "@/assets/images/glass.webp";
-import webDesign from "@/assets/images/services/web-design.jpg";
-import branding from "@/assets/images/services/branding.webp";
-import contentImg from "@/assets/images/services/content.jpg";
-import socialMedia from "@/assets/images/services/social-media.jpg";
-import showreel from "@/assets/images/showreel.png";
-import harold from "@/assets/images/testimonials/harold.jpg";
-import naomi from "@/assets/images/testimonials/naomi.webp";
-import faqImage from "@/assets/images/faq.jpg";
-import blogDesign from "@/assets/images/blog/intentional-design.webp";
-import blogRestraint from "@/assets/images/blog/visual-restraint.webp";
-import blogNature from "@/assets/images/blog/raw-nature.webp";
+import nexoraHome from "@/assets/images/sites/nexora-home.webp";
+import solenceHome from "@/assets/images/sites/solence-home.webp";
+import orbitHome from "@/assets/images/sites/orbit-home.webp";
+import carloDesktop from "@/assets/images/sites/carlo-desktop.webp";
+import carloMobile from "@/assets/images/sites/carlo-mobile.webp";
+import maisonDesktop from "@/assets/images/sites/maison-desktop.webp";
+import maisonMobile from "@/assets/images/sites/maison-mobile.webp";
+import terraDesktop from "@/assets/images/sites/terra-desktop.webp";
+import terraMobile from "@/assets/images/sites/terra-mobile.webp";
+import velithDashboard from "@/assets/images/sites/velith-dashboard.webp";
+import bronxHome from "@/assets/images/apps/bronx-home.webp";
+import bronxProduct from "@/assets/images/apps/bronx-product.webp";
+import antraSummary from "@/assets/images/apps/antra-summary.webp";
+import antraWorkout from "@/assets/images/apps/antra-workout.webp";
 import trail1 from "@/assets/images/trail/trail-1.webp";
 import trail2 from "@/assets/images/trail/trail-2.webp";
 import trail3 from "@/assets/images/trail/trail-3.webp";
@@ -40,148 +52,339 @@ import trail5 from "@/assets/images/trail/trail-5.webp";
 export type Link = { label: string; href: string };
 export type Photo = { src: StaticImageData; alt: string };
 
-const LOREM =
-  "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare.";
+const CURRENT_YEAR = new Date().getFullYear();
+
+/* ---------------------------------------------------------------------------
+ * You
+ * ------------------------------------------------------------------------- */
 
 export const brand = {
-  name: "Alture",
-  mark: "®",
-  tagline: "Creative Studio",
-  logoDark: "/brand/logo-dark.svg",
-  logoLight: "/brand/logo-light.svg",
-  email: "mark@alture.design",
+  /** Your name — used as the logo, the big hero heading, the footer and page titles. */
+  name: "Aman",
+  role: "Developer",
+  tagline: "Developer Portfolio",
+  /** Where every "Get in touch" button sends people. */
+  email: "hello@example.com",
+  github: "https://github.com/Aman2292",
+  linkedin: "https://www.linkedin.com/",
 };
 
 export const meta = {
-  title: "Alture® — Creative Studio",
-  description: "A bold creative studio crafting strategic, unforgettable and timeless brands, websites and content.",
+  title: `${brand.name} — ${brand.tagline}`,
+  description: `Portfolio of ${brand.name}, a developer building mobile apps, websites and Shopify stores.`,
 };
 
 export const socials: (Link & { icon: string })[] = [
-  { label: "Instagram", href: "https://instagram.com", icon: "/icons/instagram.svg" },
+  { label: "GitHub", href: brand.github, icon: "/icons/github.svg" },
+  { label: "LinkedIn", href: brand.linkedin, icon: "/icons/linkedin.svg" },
   { label: "X", href: "https://x.com", icon: "/icons/x.svg" },
-  { label: "Dribbble", href: "https://dribbble.com", icon: "/icons/dribbble.svg" },
 ];
 
-export const work = {
-  heading: ["Selected", "Work."],
-  label: "Projects",
-  text: LOREM,
-  year: "©25",
-  hoverLabel: "View work",
-  projects: [
-    { title: "Bronx", href: "#", image: bronx },
-    { title: "Nexora", href: "#", image: nexora },
-    { title: "Carlo", href: "#", image: carlo },
-  ],
-  cta: { label: "View all projects", href: "#" },
+/* ---------------------------------------------------------------------------
+ * Work: each category gets its own page (/applications, /websites, ...) and a tab in the navbar.
+ * Add a project by appending to `projects` with the matching `category` slug.
+ * ------------------------------------------------------------------------- */
+
+export const categories = [
+  {
+    slug: "applications",
+    label: "Applications",
+    description: "Mobile apps for iOS and Android that I've designed and built — from the first prototype to launch.",
+    cover: bronx,
+  },
+  {
+    slug: "websites",
+    label: "Websites",
+    description: "Fast, responsive websites and web apps — landing pages, business sites, dashboards and portfolios.",
+    cover: nexora,
+  },
+  {
+    slug: "shopify",
+    label: "Shopify",
+    description: "Shopify stores, custom themes and storefront work that help brands sell online.",
+    cover: carlo,
+  },
+  {
+    slug: "personal-projects",
+    label: "Personal Projects",
+    description: "Experiments and side projects — the things I build to learn something new.",
+    cover: showreel,
+  },
+] as const;
+
+export type Category = (typeof categories)[number];
+export type CategorySlug = Category["slug"];
+
+export type ProjectPage = {
+  /** Tab / page-picker label, e.g. "Home" or "Product page". */
+  label: string;
+  /** Full-page desktop screenshot (1440px wide works well). */
+  desktop: StaticImageData;
+  /** Full-page mobile screenshot (390px wide at 2x) — used by the Shopify mobile preview. */
+  mobile?: StaticImageData;
 };
 
-export const navLinks: (Link & { badge?: number })[] = [
-  { label: "Home", href: "#top" },
-  { label: "Studio", href: "#about" },
-  { label: "Work", href: "#work", badge: work.projects.length },
-  { label: "Blog", href: "#blog" },
-  { label: "Contact", href: "#contact" },
+export type Project = {
+  title: string;
+  category: CategorySlug;
+  /**
+   * How the project is shown (cards and its own page):
+   *  - `screens` → iPhone (mobile apps): portrait screenshots, ideally 1320 × 2868 straight off an iPhone Pro Max
+   *  - `pages`   → MacBook for websites, Shopify-style preview for Shopify stores: full-page screenshots
+   *  - `image`   → a plain photo, for anything else
+   */
+  screens?: StaticImageData[];
+  pages?: ProjectPage[];
+  image?: StaticImageData;
+  /** Live site, App Store page or repo (optional) — shown as a button on the project page. */
+  url?: string;
+  /** Shown in the browser address bar of website/store previews. */
+  domain?: string;
+  description: string;
+  overview?: string;
+  role?: string;
+  tags: string[];
+  year: string;
+  /** Tints the project's cards and page. */
+  color?: string;
+};
+
+// Sample projects — replace with your own work. Each gets a page at /<category>/<title>.
+export const projects: Project[] = [
+  {
+    title: "Bronx",
+    category: "applications",
+    screens: [bronxHome, bronxProduct],
+    description: "A mobile shopping app for a fashion label.",
+    overview: "Fast browsing, a clean product page and a checkout designed for thumbs — built for iOS and Android from one codebase.",
+    role: "Design & development",
+    tags: ["iOS", "Android"],
+    year: "2025",
+  },
+  {
+    title: "Antra",
+    category: "applications",
+    screens: [antraSummary, antraWorkout],
+    description: "A fitness companion that makes daily activity easy to read.",
+    overview: "Activity rings, weekly trends and workout summaries in a calm dark interface, synced with Apple Health.",
+    role: "Design & development",
+    tags: ["iOS", "Health"],
+    year: "2024",
+    color: "#1c1c1e",
+  },
+  {
+    title: "Nexora",
+    category: "websites",
+    pages: [{ label: "Home", desktop: nexoraHome }],
+    domain: "nexora.studio",
+    description: "A marketing website for a creative studio.",
+    overview: "Bold typography, a work showcase and scroll-driven motion, built to be fast and easy for the team to update.",
+    role: "Design & development",
+    tags: ["Design", "Development"],
+    year: "2025",
+    color: "#1b2a3a",
+  },
+  {
+    title: "Velith",
+    category: "websites",
+    pages: [{ label: "Dashboard", desktop: velithDashboard }],
+    domain: "app.velith.com",
+    description: "A web app for managing bookings and clients.",
+    overview: "A responsive dashboard with scheduling, client profiles and payments in one place — built for small studios.",
+    role: "Front-end development",
+    tags: ["Web app"],
+    year: "2025",
+    color: "#1b2a3a",
+  },
+  {
+    title: "Solence",
+    category: "websites",
+    pages: [{ label: "Home", desktop: solenceHome }],
+    domain: "solence.co",
+    description: "A calm, editorial website for a clean skincare brand.",
+    overview: "Soft colours, serif headlines and product rituals told through photography — designed to feel as gentle as the products.",
+    role: "Design & development",
+    tags: ["Landing page"],
+    year: "2025",
+    color: "#a4583c",
+  },
+  {
+    title: "Orbit",
+    category: "websites",
+    pages: [{ label: "Home", desktop: orbitHome }],
+    domain: "orbit.studio",
+    description: "A dark, cinematic site for an independent creative studio.",
+    overview: "Full-bleed visuals, a violet accent and case-study cards that let the work do the talking.",
+    role: "Development",
+    tags: ["Portfolio"],
+    year: "2024",
+    color: "#3a1b2a",
+  },
+  {
+    title: "Carlo",
+    category: "shopify",
+    pages: [{ label: "Home page", desktop: carloDesktop, mobile: carloMobile }],
+    domain: "carlo.myshopify.com",
+    description: "A Shopify store for a fine jewellery brand.",
+    overview: "Custom theme sections, product storytelling and a quick path to checkout on every device.",
+    role: "Theme development",
+    tags: ["Custom theme"],
+    year: "2025",
+  },
+  {
+    title: "Maison",
+    category: "shopify",
+    pages: [{ label: "Home page", desktop: maisonDesktop, mobile: maisonMobile }],
+    domain: "maison.myshopify.com",
+    description: "A Shopify storefront for a clothing label.",
+    overview: "Seasonal collections, lookbook-style merchandising and a newsletter that drives repeat visits.",
+    role: "Store setup & design",
+    tags: ["Storefront"],
+    year: "2025",
+    color: "#2b2b2b",
+  },
+  {
+    title: "Terra",
+    category: "shopify",
+    pages: [{ label: "Home page", desktop: terraDesktop, mobile: terraMobile }],
+    domain: "terra.myshopify.com",
+    description: "A Shopify store for mindful home goods.",
+    overview: "Collection tiles, a story-led homepage and plastic-free shipping messaging throughout.",
+    role: "Store setup",
+    tags: ["Store setup"],
+    year: "2024",
+    color: "#3f4a2c",
+  },
+  {
+    title: "Lumen",
+    category: "personal-projects",
+    image: showreel,
+    description: "An experiment with light, motion and WebGL.",
+    tags: ["Experiment"],
+    year: "2025",
+    color: "#1b2a3a",
+  },
+  {
+    title: "Drift",
+    category: "personal-projects",
+    image: socialMedia,
+    description: "A small side project to learn something new.",
+    tags: ["Side project"],
+    year: "2024",
+  },
+];
+
+export const projectsIn = (slug: CategorySlug) => projects.filter((project) => project.category === slug);
+
+/** App screenshots for a category's home card (up to three, from its mobile projects); empty means use the cover photo. */
+export const showcaseScreens = (slug: CategorySlug) => projectsIn(slug).flatMap((project) => project.screens ?? []).slice(0, 3);
+
+/* ---------------------------------------------------------------------------
+ * Navigation
+ * ------------------------------------------------------------------------- */
+
+export const navLinks: Link[] = [
+  ...categories.map((category) => ({ label: category.label, href: `/${category.slug}` })),
+  { label: "About me", href: "/about" },
+  { label: "Journey", href: "/journey" },
 ];
 
 export const menu = {
+  links: [{ label: "Home", href: "/" }, ...navLinks, { label: "Contact", href: "#contact" }],
   buttons: [
-    { label: "View work", href: "#work" },
+    { label: "My journey", href: "/journey" },
     { label: "Get in touch", href: "#contact" },
   ],
   contactCard: { label: "Contact", href: "#contact", image: menuContact },
   bottomLinks: [
     { label: "Email me", href: `mailto:${brand.email}` },
-    { label: "Book a call", href: "https://calendly.com" },
+    { label: "GitHub", href: brand.github },
   ],
 };
 
+/* ---------------------------------------------------------------------------
+ * Home page
+ * ------------------------------------------------------------------------- */
+
 export const hero = {
   title: brand.name,
-  subtitle: "Studio",
+  subtitle: brand.role,
   video: { src: "/videos/hero.mp4", poster: "/videos/hero-poster.jpg" },
-  scrollNote: "Scroll to reveal —",
-  services: ["Web design", "Branding", "Content", "Social media"],
-  label: `We are ${brand.name}`,
-  subhead: "Not just a studio, we are",
-  rotatingWords: ["Strategic.", "Unforgettable.", "Timeless."],
+  scrollNote: "Scroll to explore —",
+  services: categories.map((category) => category.label),
+  label: `Hi, I'm ${brand.name}`,
+  subhead: "I design and build",
+  rotatingWords: ["Applications.", "Websites.", "Shopify stores."],
   contact: {
-    photo: { src: contactPortrait, alt: "A man in a black turtle neck sweater." } satisfies Photo,
-    cta: "Contact Mark",
-    role: "Business director at Alture®",
+    photo: { src: contactPortrait, alt: `Portrait of ${brand.name}` } satisfies Photo,
+    cta: "Contact me",
+    role: "Let's build something together",
     details: [
       { label: "Email", value: brand.email, href: `mailto:${brand.email}` },
-      { label: "Phone", value: "+1-202-555-0102", href: "tel:+1-202-555-0102" },
-      { label: "Schedule a call", value: "Calendly", href: "https://calendly.com" },
+      { label: "GitHub", value: brand.github.replace("https://", ""), href: brand.github },
+      { label: "LinkedIn", value: "Connect with me", href: brand.linkedin },
     ],
   },
 };
 
-export const partners = {
-  label: "Partners",
-  heading: "We collaborate with forward-thinking brands to build lasting creative impact.",
-  items: Array.from({ length: 8 }, (_, i) => ({
-    logo: `/partners/logo-${i + 1}.svg`,
-    name: "Loreipsum",
-    description: "Lorem ipsum dolor sit amet, consectetur.",
-  })),
+export const work = {
+  heading: ["Selected", "Work."],
+  label: "Projects",
+  text: "A selection of apps, websites and Shopify stores I've designed and built — plus a few personal experiments.",
+  year: `©${String(CURRENT_YEAR).slice(2)}`,
+  hoverLabel: "View work",
 };
 
 export const whyUs = {
-  label: "Why work with us",
-  heading: "We help ambitious brands make their mark—with clarity and precision.",
+  label: "Why work with me",
+  heading: "I help founders and businesses turn ideas into polished products — with clarity and care.",
   team: {
-    heading: "A strong team of experts",
+    heading: "Great people I've worked with",
     outerRing: [member1, member2, member3, member4],
     innerRing: [member5, member6, member7],
   },
   chat: {
     label: "Real-time collaboration",
     incoming: { avatar: avatarClient, messages: ["Hey!", "The website looks awesome", "Can we update the homepage banner?"] },
-    reply: { avatar: member3, messages: ["Hi Philip!", "Sure, we'll have our team on it"] },
+    reply: { avatar: contactPortrait, messages: ["Hi Philip!", "Sure, I'll have it updated today"] },
   },
-  pricing: { title: "Transparent pricing model", image: glass, cta: { label: "View pricing", href: "#pricing" } },
+  process: { title: "From idea to launch, step by step", image: glass, cta: { label: "Start a project", href: "#contact" } },
 };
 
 export const about = {
   video: { src: "/videos/about.mp4", poster: "/videos/about-poster.jpg" },
-  quote:
-    "“Great work doesn’t happen by accident. It comes from listening closely, challenging ideas, and obsessing over the details — that’s what we do every day.”",
-  author: "Otto Silva",
-  role: "Co-founder of Alture®",
-  label: "About us",
-  heading: "We’re a hands-on digital agency building thoughtful solutions for ambitious brands.",
-  text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra.",
-  cta: { label: "More about us", href: "#services" },
+  quote: "“Good software feels effortless — and that takes a lot of care behind the scenes.”",
+  author: brand.name,
+  role: brand.role,
+  label: "About me",
+  heading: "I turn ideas into fast, polished apps, websites and online stores.",
+  text: "From mobile apps to Shopify storefronts, I care about clean code, smooth interactions and the small details that make a product feel effortless.",
+  buttons: [
+    { label: "More about me", href: "/about" },
+    { label: "My journey", href: "/journey" },
+  ],
 };
 
 export const services = {
-  title: "Services",
+  title: "What I do",
   items: [
     {
-      title: "Web design",
-      tags: ["Website", "Wireframe", "Landing page", "Dashboard", "Product"],
-      photo: { src: webDesign, alt: "A flat screen tv sitting on top of a wooden table." },
-      text: LOREM,
-    },
-    {
-      title: "Branding",
-      tags: ["Logo", "Packaging", "Mockup", "Deck", "Visual identity", "Guidelines"],
-      photo: { src: branding, alt: "A young man wearing a grey hooded jacket." },
-      text: LOREM,
-    },
-    {
-      title: "Content",
-      tags: ["UX writing", "Social content", "Campaign", "Deck", "Advertising"],
+      title: "Applications",
+      tags: ["iOS", "Android", "Cross-platform", "App Store launch", "Prototypes"],
       photo: { src: contentImg, alt: "A close up of a person typing on a laptop." },
-      text: LOREM,
+      text: "iOS and Android apps with smooth, native-feeling UX, clean architecture and a focus on performance.",
     },
     {
-      title: "Social media",
-      tags: ["Strategy", "Growth", "Campaign", "Posts", "Design", "Content"],
-      photo: { src: socialMedia, alt: "A man and a woman standing next to each other." },
-      text: LOREM,
+      title: "Websites",
+      tags: ["Landing pages", "Business sites", "Web apps", "Portfolios", "Animations"],
+      photo: { src: webDesign, alt: "A laptop showing a website on a wooden table." },
+      text: "Responsive websites and web apps with thoughtful motion — built to load fast and make a great first impression.",
+    },
+    {
+      title: "Shopify",
+      tags: ["Store setup", "Custom themes", "Liquid", "Integrations", "Speed"],
+      photo: { src: branding, alt: "A close-up of a person in a grey puffer jacket." },
+      text: "Shopify stores built and customised end to end — themes, sections and integrations that help brands sell.",
     },
   ] satisfies { title: string; tags: string[]; photo: Photo; text: string }[],
   cta: { label: "Get in touch", href: "#contact" },
@@ -189,132 +392,128 @@ export const services = {
 
 export const showreelSection = {
   note: "Keep scrolling",
-  leftHeading: "©2025",
+  leftHeading: `©${CURRENT_YEAR}`,
   rightHeading: "Showreel",
   playLabel: "Play showreel",
-  photo: { src: showreel, alt: "A man standing in the middle of a dark room." } satisfies Photo,
-  /** Any embeddable video URL (YouTube, Vimeo...). */
+  photo: { src: showreel, alt: "A person standing in a dark room lit by streaks of light." } satisfies Photo,
+  /** Any embeddable video URL (YouTube, Vimeo...) — swap in your own reel. */
   videoEmbedUrl: "https://www.youtube.com/embed/p1CLeATYZUQ?autoplay=1&rel=0",
   videoPageUrl: "https://www.youtube.com/watch?v=p1CLeATYZUQ",
 };
 
-export const testimonials = {
-  label: "Testimonials",
-  heading: "What our clients are saying",
-  stats: {
-    title: "Some data about our clients",
+/** Home page "Latest projects": the newest entries from `projects`, most recent year first. */
+export const latestProjects = {
+  label: "Latest",
+  heading: "Latest projects",
+  count: 3,
+  cta: { label: "View all work", href: "/#work" },
+};
+
+/* ---------------------------------------------------------------------------
+ * Category pages
+ * ------------------------------------------------------------------------- */
+
+export const categoryPage = {
+  label: "Projects",
+  hoverLabel: "View project",
+  empty: "New projects coming soon.",
+  moreLabel: "More work",
+};
+
+/* ---------------------------------------------------------------------------
+ * About page (/about)
+ * ------------------------------------------------------------------------- */
+
+export const aboutPage = {
+  heading: "About me.",
+  label: `Hi, I'm ${brand.name}`,
+  intro: "A developer building mobile apps, websites and Shopify stores.",
+  portrait: { src: contactPortrait, alt: `Portrait of ${brand.name}` } satisfies Photo,
+  lead: "I build digital products that look good, feel fast and are easy to use.",
+  bio: [
+    "I enjoy turning ideas into real products — whether that's an app people use every day, a website that makes a great first impression or a Shopify store that sells.",
+    "I care about clean, maintainable code, smooth interactions and the small details that make something feel effortless. Between client projects I'm usually building something of my own and learning new tools.",
+  ],
+  details: [
+    { label: "Focus", value: "Apps · Websites · Shopify" },
+    { label: "Currently", value: "Open to new projects" },
+    { label: "Email", value: brand.email, href: `mailto:${brand.email}` },
+  ],
+  buttons: [
+    { label: "My journey", href: "/journey" },
+    { label: "Get in touch", href: "#contact" },
+  ],
+  toolbox: {
+    label: "Toolbox",
+    heading: "Tools and technologies I use to bring ideas to life.",
+    // Edit to match your stack.
     items: [
-      { value: 92, label: "of our clients return for a second project" },
-      { value: 87, label: "reported a stronger brand perception" },
-      { value: 74, label: "saw increased engagement on digital" },
+      { name: "JavaScript", note: "Language" },
+      { name: "TypeScript", note: "Language" },
+      { name: "React", note: "UI library" },
+      { name: "Next.js", note: "Web framework" },
+      { name: "React Native", note: "Mobile apps" },
+      { name: "Node.js", note: "Backend" },
+      { name: "Shopify", note: "E-commerce" },
+      { name: "Liquid", note: "Shopify themes" },
+      { name: "Figma", note: "Design" },
+      { name: "Git", note: "Version control" },
     ],
   },
-  featured: {
-    photo: { src: harold, alt: "A man wearing a brown coat and a brown hat." } satisfies Photo,
-    quote: "“Working with Alture felt less like hiring a design agency and more like gaining a strategic partner forever.”",
-    author: "Harold Mercer",
-    role: "Investor at Solence®",
+  journeyTeaser: {
+    label: "Journey",
+    heading: "How I got here — from my first line of code to today.",
+    cta: "Explore my journey",
+    href: "/journey",
+    image: socialMedia,
   },
-  cards: [
-    {
-      quote: "“Fast, thoughtful, and deeply collaborative. Alture felt like part of our team from day one.”",
-      author: "Naomi Voss",
-      role: "Creative Director at",
-      company: "Antra",
-      avatar: naomi,
-    },
-    {
-      quote:
-        "“Alture’s work was minimal in form but rich in intention. They helped us express our brand with clarity and confidence.”",
-      author: "Mark Williams",
-      role: "Head of Brand at",
-      company: "Velith",
-      avatar: avatarClient,
-    },
-  ],
-  /** Rolling counters. `value` is the digits that roll; prefix/suffix stay static. */
-  numbers: [
-    { prefix: "$", value: "43", suffix: "M", label: "Revenue influenced by our work" },
-    { prefix: "", value: "87", suffix: "K", label: "Leads generated for our clients" },
-    { prefix: "", value: "268", suffix: "", label: "Brands we've partnered with" },
-  ],
-  footnotes: [
-    "1 - Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique.",
-    "2 - Duis cursus, mi quis viverra ornare, eros dolor interdum nulla, ut commodo diam libero vitae erat. Aenean faucibus nibh et justo.",
-  ],
 };
 
-export const pricing = {
-  label: "2 slots available",
-  heading: "Pricing",
-  plans: [
-    {
-      badge: "Affordable",
-      name: "Standard",
-      price: "3450",
-      period: "/project",
-      features: [
-        ["Fast design & dev", ", built for scale"],
-        ["Dedicated ", "creative team"],
-        ["Average 2–3 day", " turnaround"],
-        ["Ongoing ", "design-to-build support"],
-        ["Fast design & dev", ", built for scale"],
-      ],
-      term: "2-4 weeks sprint",
-      cta: { label: "Learn more", href: "#contact" },
-      guarantee: "7-day money-back guarantee",
-      light: false,
-    },
-    {
-      badge: "Popular",
-      name: "Pro",
-      price: "6850",
-      period: "/monthly",
-      features: [
-        ["Unlimited tasks", ", one at time"],
-        ["Slack ", "channel and message"],
-        ["Average 24h", " turnaround"],
-        ["Ongoing ", "design-to-build support"],
-        ["Branding and dev", " sprints"],
-      ],
-      term: "Monthly retainer",
-      cta: { label: "Learn more", href: "#contact" },
-      guarantee: "7-day money-back guarantee",
-      light: true,
-    },
-  ],
-  note: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum.",
+/* ---------------------------------------------------------------------------
+ * Journey page (/journey)
+ * ------------------------------------------------------------------------- */
+
+export type Milestone = {
+  year: string;
+  title: string;
+  place: string;
+  description: string;
+  tags: string[];
+  image: StaticImageData;
 };
 
-const FAQ_ANSWER =
-  "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin pharetra rutrum purus vel egestas. Phasellus ut nulla ut odio blandit pretium. Proin sit amet turpis posuere, vehicula est non, aliquet mauris.";
+const MILESTONE_TEXT = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique.";
 
-export const faq = {
-  label: "FAQ",
-  heading: "Answered questions.",
-  subheading: "Everything you might want to know—up front.",
-  photo: { src: faqImage, alt: "A woman in a black top with her arms crossed." } satisfies Photo,
-  items: [
-    { question: "What type of clients do you usually work with?", answer: FAQ_ANSWER },
-    { question: "How long does a typical project take?", answer: FAQ_ANSWER },
-    { question: "Do you offer ongoing support after a project ends?", answer: FAQ_ANSWER },
-    { question: "How do I get started or request a proposal?", answer: FAQ_ANSWER },
-  ],
+export const journey = {
+  heading: "Journey.",
+  label: "My story so far",
+  intro: "The milestones, projects and lessons that shaped how I build today.",
+  scrollNote: "Keep scrolling to travel through time —",
+  // Sample milestones — replace them with your real story (oldest first).
+  milestones: [
+    { year: "2019", title: "Wrote my first line of code", place: "Self-taught", description: MILESTONE_TEXT, tags: ["HTML", "CSS"], image: trail1 },
+    { year: "2020", title: "Built my first website", place: "Side project", description: MILESTONE_TEXT, tags: ["JavaScript"], image: trail2 },
+    { year: "2021", title: "Landed my first client", place: "Freelance", description: MILESTONE_TEXT, tags: ["Websites"], image: trail4 },
+    { year: "2022", title: "Launched my first Shopify store", place: "Freelance", description: MILESTONE_TEXT, tags: ["Shopify", "Liquid"], image: carlo },
+    { year: "2024", title: "Shipped my first app", place: "Freelance", description: MILESTONE_TEXT, tags: ["Applications"], image: trail5 },
+    { year: "Now", title: "Building what's next", place: "Open to new projects", description: MILESTONE_TEXT, tags: ["Apps", "Websites", "Shopify"], image: nexora },
+  ] satisfies Milestone[],
+  stats: {
+    label: "In numbers",
+    items: [
+      { value: String(CURRENT_YEAR - 2019), suffix: "+", label: "Years building for the web" },
+      { value: String(projects.length), suffix: "", label: "Projects in this portfolio" },
+      { value: String(projectsIn("shopify").length), suffix: "", label: "Shopify stores launched" },
+    ],
+  },
 };
 
-export const blog = {
-  label: "Blog",
-  heading: "Latest articles",
-  cta: { label: "View all", href: "#" },
-  posts: [
-    { title: "Nurturing brands through intentional design", date: "June 29, 2025", href: "#", image: blogDesign },
-    { title: "The power of restraint in visual storytelling", date: "June 30, 2025", href: "#", image: blogRestraint },
-    { title: "Balancing elegance and raw nature in brand expression", date: "July 1, 2025", href: "#", image: blogNature },
-  ],
-};
+/* ---------------------------------------------------------------------------
+ * Contact section + footer (every page)
+ * ------------------------------------------------------------------------- */
 
 export const cta = {
-  heading: `Start your project with ${brand.name}®`,
+  heading: "Let's build something together.",
   button: { label: "Get in touch", href: `mailto:${brand.email}` },
   note: "Move your mouse —",
   /** Images that follow the cursor over the section. */
@@ -325,33 +524,15 @@ export const footer = {
   pagesLabel: "Pages",
   pageColumns: [
     [
-      { label: "Home", href: "#top" },
-      { label: "Studio", href: "#about" },
-      { label: "Work", href: "#work" },
+      { label: "Home", href: "/" },
+      { label: "About me", href: "/about" },
+      { label: "Journey", href: "/journey" },
     ],
-    [
-      { label: "Services", href: "#services" },
-      { label: "Testimonials", href: "#testimonials" },
-      { label: "Pricing", href: "#pricing" },
-    ],
-    [
-      { label: "FAQ", href: "#faq" },
-      { label: "Blog", href: "#blog" },
-      { label: "Contact", href: "#contact" },
-    ],
+    navLinks.slice(0, 2),
+    navLinks.slice(2, 4),
+    [{ label: "Contact", href: "#contact" }],
   ],
-  newsletter: {
-    label: "Join the newsletter",
-    placeholder: "Email*",
-    button: "Subscribe",
-    success: "Your submission has been received!",
-    error: "Oops! Something went wrong while submitting the form.",
-    /**
-     * POST endpoint that accepts form data with an `email` field (e.g. Formspree, Buttondown, your own API).
-     * Leave empty to open the visitor's mail app addressed to `brand.email` instead.
-     */
-    endpoint: "",
-  },
+  contact: { label: "Say hello", email: brand.email },
   credits: [
     { label: "Built with", linkLabel: "Next.js", href: "https://nextjs.org" },
     { label: "Design by", linkLabel: "Template Supply", href: "https://www.template.supply/" },

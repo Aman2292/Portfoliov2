@@ -26,26 +26,33 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
 function ScrollSync() {
   const lenis = useLenis(ScrollTrigger.update);
 
-  // Smooth-scroll in-page anchors, offset by the fixed navbar. A bare "#" is treated as a placeholder link.
+  // Smooth-scroll links that point at a section of the current page ("#contact", or "/#about" while on "/"),
+  // offset by the fixed navbar. A bare "#" is treated as a placeholder link. Links to other pages are left
+  // to Next. Runs in the capture phase so preventDefault() lands before next/link's click handler.
   useEffect(() => {
     if (!lenis) return;
     const onClick = (event: MouseEvent) => {
-      if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey) return;
-      const link = (event.target as Element | null)?.closest?.("a[href^='#']");
-      const hash = link?.getAttribute("href");
-      if (!hash) return;
-      event.preventDefault();
-      if (hash === "#") return;
-      const target = hash === "#top" ? 0 : document.querySelector<HTMLElement>(hash);
+      if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey) return;
+      const link = (event.target as Element | null)?.closest?.("a[href]");
+      const rawHref = link?.getAttribute("href");
+      if (!link || !rawHref) return;
+      if (rawHref === "#") {
+        event.preventDefault();
+        return;
+      }
+      const url = new URL(rawHref, window.location.href);
+      if (!url.hash || url.origin !== window.location.origin || url.pathname !== window.location.pathname) return;
+      const target = url.hash === "#top" ? 0 : document.querySelector<HTMLElement>(url.hash);
       if (target === null) return;
+      event.preventDefault();
       // Links inside the menu fire while scrolling is paused. Resume first: start() resets any
       // in-flight scroll, so calling it after scrollTo (as the menu's close does) would cut it short.
       lenis.start();
       const navHeight = document.querySelector(".navbar")?.getBoundingClientRect().height ?? 0;
       lenis.scrollTo(target, { offset: target === 0 ? 0 : -navHeight });
     };
-    document.addEventListener("click", onClick);
-    return () => document.removeEventListener("click", onClick);
+    document.addEventListener("click", onClick, true);
+    return () => document.removeEventListener("click", onClick, true);
   }, [lenis]);
 
   return null;
