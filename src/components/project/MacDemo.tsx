@@ -79,7 +79,7 @@ export function MacDemo({ pages, domain, title, description }: { pages: ProjectP
     <div className="mac-demo">
       <div className="mac-demo_device">
         <MacMockup>
-          <MacDesktop domain={domain} message={description} />
+          <MacDesktop domain={domain} message={description} sizes="(max-width: 991px) 95vw, 1100px" preload />
         </MacMockup>
         <OpenFullscreen label={`Explore the ${title} website`} onClick={() => setOpen(true)}>
           <span className="if-hover">Click</span>

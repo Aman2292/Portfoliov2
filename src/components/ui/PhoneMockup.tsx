@@ -1,6 +1,8 @@
 import Image, { type StaticImageData } from "next/image";
 import type { CSSProperties, ReactNode } from "react";
+import wallpaper from "@/assets/images/lock-wallpaper.webp";
 import { cx } from "@/lib/utils";
+import { MinuteQuote } from "./MinuteQuote";
 
 /**
  * A Pro Max–style iPhone drawn in CSS (titanium frame, thin bezel, Dynamic Island, side buttons).
@@ -68,28 +70,57 @@ export function PhoneStatusBar({ className, clock = true }: { className?: string
   );
 }
 
-/** iOS lock screen on a wallpaper in the project colour: the clock and a notification from the app. */
-export function PhoneLockScreen({ app, message, className }: { app: string; message: string; className?: string }) {
+/**
+ * iOS lock screen: a wallpaper, the date and weather, the clock, a famous quote that changes every minute
+ * and a notification from the app, the last two on Apple-style frosted glass. `sizes` is for the
+ * wallpaper, as wide as the phone's screen; `preload` it when the phone is the first thing on the page.
+ */
+export function PhoneLockScreen({
+  app,
+  message,
+  sizes,
+  preload,
+  className,
+}: {
+  app: string;
+  message: string;
+  sizes: string;
+  preload?: boolean;
+  className?: string;
+}) {
   return (
-    <div className={cx("lock os-wallpaper", className)} aria-hidden="true">
+    <div className={cx("lock", className)} aria-hidden="true">
+      <Image src={wallpaper} alt="" fill sizes={sizes} preload={preload} className="lock_wallpaper" />
       <PhoneStatusBar className="is-light" clock={false} />
-      <div className="lock_clock">
-        <span className="lock_date">Tuesday 9 September</span>
-        <span className="lock_time">9:41</span>
+      <div className="lock_date">
+        Tue 9
+        <svg viewBox="0 0 24 24">
+          <circle cx="15" cy="8.5" r="3.4" />
+          <path d="M15 2.4v1.4m4.6.5-1 1m2.9 4.2h-1.4m-9.7-4.2 1 1" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+          <path d="M7.2 20h9.6a3.6 3.6 0 0 0 .3-7.2 5.2 5.2 0 0 0-9.9 1.4A2.9 2.9 0 0 0 7.2 20Z" />
+        </svg>
+        24°
       </div>
-      <div className="lock_note">
-        <span className="app-icon">{app.charAt(0)}</span>
-        <span className="lock_note-text">
-          <span className="lock_note-head">
-            <b>{app}</b>
-            <span>now</span>
+      <div className="lock_time">9:41</div>
+      <div className="lock_stack">
+        <MinuteQuote className="lock_quote" />
+        <div className="lock_note glass">
+          <span className="app-icon">{app.charAt(0)}</span>
+          <span className="lock_note-text">
+            <span className="lock_note-head">
+              <b>{app}</b>
+              <span>now</span>
+            </span>
+            <span>{message}</span>
           </span>
-          <span>{message}</span>
-        </span>
+        </div>
       </div>
       <span className="lock_btn is-left">
         <svg viewBox="0 0 24 24">
-          <path d="M8 3h8v3l-2 4v11h-4V10L8 6V3Z" />
+          <path
+            fillRule="evenodd"
+            d="M7 2h10v4l-2.5 3.5V21a1 1 0 0 1-1 1h-3a1 1 0 0 1-1-1V9.5L7 6V2Zm5 9.8a1.2 1.2 0 1 0 0 2.4 1.2 1.2 0 0 0 0-2.4Z"
+          />
         </svg>
       </span>
       <span className="lock_btn is-right">

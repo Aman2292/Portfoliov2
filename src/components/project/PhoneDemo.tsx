@@ -48,10 +48,9 @@ function bootUp(phone: Element) {
 }
 
 /**
- * The app on a big iPhone that leans towards the cursor, showing its lock screen with a notification
- * from the app. Clicking it grows the phone to full screen, where it boots up (Apple logo on black,
- * then the app launches); then each screen scrolls, and a corner panel, swipes or the arrow keys
- * switch between them.
+ * The app on a big iPhone that leans towards the cursor, showing its lock screen. Clicking it grows
+ * the phone to full screen, where it boots up (Apple logo on black, then the app launches); then
+ * each screen scrolls, and a corner panel, swipes or the arrow keys switch between them.
  */
 export function PhoneDemo({ screens, title, description }: { screens: StaticImageData[]; title: string; description: string }) {
   const [index, setIndex] = useState(0);
@@ -121,7 +120,7 @@ export function PhoneDemo({ screens, title, description }: { screens: StaticImag
       <div className="phone-demo_stage" ref={stage} onPointerMove={tilt} onPointerLeave={untilt}>
         <div className="phone-demo_device" ref={device}>
           <PhoneMockup className="phone-demo_phone">
-            <PhoneLockScreen app={title} message={description} />
+            <PhoneLockScreen app={title} message={description} sizes={SCREEN_SIZES} preload />
           </PhoneMockup>
           <OpenFullscreen label={`Explore the ${title} app`} onClick={() => setOpen(true)}>
             <span className="if-hover">Click</span>
@@ -154,7 +153,7 @@ export function PhoneDemo({ screens, title, description }: { screens: StaticImag
                 ))}
               </div>
             </div>
-            <PhoneLockScreen app={title} message={description} className="device-full_lock" />
+            <PhoneLockScreen app={title} message={description} sizes={SCREEN_SIZES} className="device-full_lock" />
             <div className="phone-boot" aria-hidden="true">
               <AppleLogo className="phone-boot_logo" />
             </div>

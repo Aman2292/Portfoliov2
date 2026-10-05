@@ -8,9 +8,9 @@ import { SmartLink } from "@/components/ui/SmartLink";
 import { deviceFor, domainFor, nextProject, projectPath } from "@/lib/projects";
 import { MacDemo } from "./MacDemo";
 import { Arrow, PhoneDemo } from "./PhoneDemo";
-import { ShopifyPreview } from "./ShopifyPreview";
+import { StoreDemo } from "./StoreDemo";
 
-/** The interactive device for a project: iPhone for apps, MacBook for websites, Shopify preview for stores. */
+/** The interactive device for a project: iPhone for apps, MacBook for websites, MacBook + iPhone for Shopify stores. */
 function ProjectDemo({ project }: { project: Project }) {
   switch (deviceFor(project)) {
     case "phone":
@@ -18,7 +18,7 @@ function ProjectDemo({ project }: { project: Project }) {
     case "mac":
       return <MacDemo pages={project.pages!} domain={domainFor(project)} title={project.title} description={project.description} />;
     case "shopify":
-      return <ShopifyPreview pages={project.pages!} domain={domainFor(project)} title={project.title} url={project.url} />;
+      return <StoreDemo pages={project.pages!} domain={domainFor(project)} title={project.title} description={project.description} url={project.url} />;
     default:
       return project.image ? (
         <div className="project_photo">

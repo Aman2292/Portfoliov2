@@ -420,6 +420,42 @@ export const categoryPage = {
   moreLabel: "More work",
 };
 
+/** The iPhone's lock screen and the MacBook's desktop show one of these, a new one every minute, in shuffled order. */
+export const screenQuotes = [
+  { text: "The journey of a thousand miles begins with one step.", by: "Lao Tzu" },
+  { text: "Not all those who wander are lost.", by: "J.R.R. Tolkien" },
+  { text: "Life is what happens to you while you're busy making other plans.", by: "John Lennon" },
+  { text: "Hope is the thing with feathers.", by: "Emily Dickinson" },
+  { text: "Nothing in life is to be feared, it is only to be understood.", by: "Marie Curie" },
+  { text: "The unexamined life is not worth living.", by: "Socrates" },
+  { text: "Try again. Fail again. Fail better.", by: "Samuel Beckett" },
+  { text: "We are what we repeatedly do.", by: "Will Durant" },
+  { text: "Tell me, what is it you plan to do with your one wild and precious life?", by: "Mary Oliver" },
+  { text: "Imagination is more important than knowledge.", by: "Albert Einstein" },
+  { text: "Well done is better than well said.", by: "Benjamin Franklin" },
+  { text: "Hold fast to dreams.", by: "Langston Hughes" },
+  { text: "Do. Or do not. There is no try.", by: "Yoda" },
+  { text: "The only thing we have to fear is fear itself.", by: "Franklin D. Roosevelt" },
+  { text: "Have no fear of perfection — you'll never reach it.", by: "Salvador Dalí" },
+  { text: "The best time to plant a tree was 20 years ago. The second best time is now.", by: "Chinese proverb" },
+  { text: "Slow and steady wins the race.", by: "Aesop" },
+  { text: "The cure for anything is salt water: sweat, tears or the sea.", by: "Isak Dinesen" },
+  { text: "I think, therefore I am.", by: "René Descartes" },
+  { text: "Whoever is happy will make others happy too.", by: "Anne Frank" },
+  { text: "The sun is new each day.", by: "Heraclitus" },
+  { text: "You can't use up creativity. The more you use, the more you have.", by: "Maya Angelou" },
+  { text: "Adventure is worthwhile in itself.", by: "Amelia Earhart" },
+  { text: "It is not the mountain we conquer, but ourselves.", by: "Edmund Hillary" },
+  { text: "Less, but better.", by: "Dieter Rams" },
+  { text: "Design is thinking made visual.", by: "Saul Bass" },
+  { text: "Simple can be harder than complex.", by: "Steve Jobs" },
+  { text: "The details are not the details. They make the design.", by: "Charles Eames" },
+  { text: "Talk is cheap. Show me the code.", by: "Linus Torvalds" },
+  { text: "The best way to predict the future is to invent it.", by: "Alan Kay" },
+  { text: "Make it work, make it right, make it fast.", by: "Kent Beck" },
+  { text: "The only way to do great work is to love what you do.", by: "Steve Jobs" },
+];
+
 /* ---------------------------------------------------------------------------
  * About page (/about)
  * ------------------------------------------------------------------------- */

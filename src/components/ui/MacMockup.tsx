@@ -1,8 +1,10 @@
 import Image, { type StaticImageData } from "next/image";
 import type { CSSProperties, ReactNode } from "react";
+import wallpaper from "@/assets/images/mac-wallpaper.webp";
 import { cx } from "@/lib/utils";
 import { AppleLogo } from "./AppleLogo";
 import { BrowserWindow } from "./BrowserWindow";
+import { MinuteQuote } from "./MinuteQuote";
 import { PhoneMockup } from "./PhoneMockup";
 
 /**
@@ -69,10 +71,15 @@ function DockIcon({ app, className }: { app: keyof typeof DOCK; className?: stri
   );
 }
 
-/** macOS desktop on a wallpaper in the project colour: menu bar, a Safari notification about the site and the Dock. */
-export function MacDesktop({ domain, message }: { domain: string; message: string }) {
+/**
+ * macOS desktop on a misty valley wallpaper: menu bar, calendar and quote widgets, a Safari
+ * notification about the site and the Dock, on Apple-style frosted glass. `sizes` is for the wallpaper,
+ * as wide as the screen; `preload` it when the MacBook is the first thing on the page.
+ */
+export function MacDesktop({ domain, message, sizes, preload }: { domain: string; message: string; sizes: string; preload?: boolean }) {
   return (
-    <div className="desktop os-wallpaper" aria-hidden="true">
+    <div className="desktop" aria-hidden="true">
+      <Image src={wallpaper} alt="" fill sizes={sizes} preload={preload} className="desktop_wallpaper" />
       <div className="desktop_menubar">
         <span className="desktop_menus">
           <AppleLogo className="desktop_apple" />
@@ -93,7 +100,21 @@ export function MacDesktop({ domain, message }: { domain: string; message: strin
           <span>Tue 9 Sep&nbsp;&nbsp;9:41</span>
         </span>
       </div>
-      <div className="desktop_note">
+      <div className="desktop_widgets">
+        <div className="desktop_cal glass">
+          <span className="desktop_cal-day">Tuesday</span>
+          <span className="desktop_cal-date">9</span>
+          <span className="desktop_cal-weather">
+            <svg viewBox="0 0 24 24">
+              <circle cx="15" cy="8.5" r="3.4" />
+              <path d="M7.2 20h9.6a3.6 3.6 0 0 0 .3-7.2 5.2 5.2 0 0 0-9.9 1.4A2.9 2.9 0 0 0 7.2 20Z" />
+            </svg>
+            24° Partly cloudy
+          </span>
+        </div>
+        <MinuteQuote className="desktop_quote" />
+      </div>
+      <div className="desktop_note glass">
         <DockIcon app="safari" />
         <span className="desktop_note-text">
           <span className="desktop_note-head">
@@ -103,7 +124,7 @@ export function MacDesktop({ domain, message }: { domain: string; message: strin
           <span>{message}</span>
         </span>
       </div>
-      <div className="desktop_dock">
+      <div className="desktop_dock glass">
         {(Object.keys(DOCK) as (keyof typeof DOCK)[]).map((app) => (
           <DockIcon key={app} app={app} className={app === "safari" ? "is-running" : undefined} />
         ))}

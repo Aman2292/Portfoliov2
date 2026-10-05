@@ -20,7 +20,19 @@ const subscribePhone = (onChange: () => void) => {
  * A Shopify theme-preview style viewer: a dark top bar with the store, a page picker and a
  * desktop/mobile toggle, over a canvas showing the storefront in a browser or on an iPhone.
  */
-export function ShopifyPreview({ pages, domain, title, url }: { pages: ProjectPage[]; domain: string; title: string; url?: string }) {
+export function ShopifyPreview({
+  pages,
+  domain,
+  title,
+  url,
+  className,
+}: {
+  pages: ProjectPage[];
+  domain: string;
+  title: string;
+  url?: string;
+  className?: string;
+}) {
   // Phones start on the mobile preview until the visitor picks a size.
   const onPhone = useSyncExternalStore(subscribePhone, () => window.matchMedia(PHONE).matches, () => false);
   const [picked, setDevice] = useState<Device | null>(null);
@@ -29,7 +41,7 @@ export function ShopifyPreview({ pages, domain, title, url }: { pages: ProjectPa
   const page = pages[active];
 
   return (
-    <div className="shopify-preview">
+    <div className={cx("shopify-preview", className)}>
       <div className="shopify-preview_bar">
         <div className="shopify-preview_store">
           <span className="shopify-preview_icon" aria-hidden="true">
@@ -84,6 +96,8 @@ export function ShopifyPreview({ pages, domain, title, url }: { pages: ProjectPa
         ) : (
           <span className="shopify-preview_live is-static">{domain}</span>
         )}
+        {/* Loading bar, swept across as the preview opens (see StoreDemo). */}
+        <span className="shopify-preview_progress" aria-hidden="true" />
       </div>
 
       <div className={cx("shopify-preview_canvas", `is-${device}`)}>

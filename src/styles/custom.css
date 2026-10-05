@@ -672,25 +672,56 @@ a:is(:hover, :focus-visible) .phone-showcase .is-right {
 
 /* ---------- Device home screens (the page's phone and MacBook before you explore) ---------- */
 
-/* Wallpaper in the project colour, with a warm glow from the accent. */
-.os-wallpaper {
-  background:
-    radial-gradient(70% 50% at 18% 12%, color-mix(in srgb, var(--showcase) 35%, #fff) 0%, #fff0 70%),
-    radial-gradient(60% 45% at 88% 62%, color-mix(in srgb, var(--showcase) 55%, var(--_colors---primary--accent)) 0%, #0000 70%),
-    radial-gradient(80% 55% at 25% 100%, color-mix(in srgb, var(--showcase) 70%, #000) 0%, #0000 75%),
-    linear-gradient(165deg, color-mix(in srgb, var(--showcase) 70%, #fff) 0%, var(--showcase) 50%, color-mix(in srgb, var(--showcase) 65%, #000) 100%);
+/* Apple's UI font where the visitor has it (San Francisco on Apple devices); Inter, its closest
+ * open-source match, everywhere else. SF Pro itself can't be served: its licence only covers mock-ups. */
+.lock,
+.desktop,
+.phone_statusbar {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", var(--font-inter), "Helvetica Neue", Arial, sans-serif;
 }
 
-/* App icon: the project's initial on a tile in its colour. */
-.app-icon {
-  display: grid;
-  flex: none;
-  place-items: center;
-  aspect-ratio: 1;
-  background: linear-gradient(145deg, color-mix(in srgb, var(--showcase) 55%, #fff), var(--showcase));
-  color: #fff;
-  font-weight: var(--_typography---font-weight--semibold);
-  line-height: 1;
+/* Apple-style frosted glass: a bright, blurred and saturated backdrop, a light rim and a soft shadow.
+ * Sized in em, so each card scales with its own font size. */
+.glass {
+  border: 0.06em solid #ffffff80;
+  background: linear-gradient(165deg, #ffffffb3, #ffffff73);
+  box-shadow:
+    inset 0 0.075em 0.12em #ffffffb3,
+    0 0.5em 1.5em #00000024;
+  color: #1d1d1f;
+  -webkit-backdrop-filter: blur(1.25em) saturate(1.8);
+  backdrop-filter: blur(1.25em) saturate(1.8);
+}
+
+/* Quote of the minute (MinuteQuote) on the iPhone's lock screen and the MacBook's desktop. */
+.quote {
+  margin: 0;
+  animation: quote-in 0.9s var(--ease-out-expo) both;
+}
+
+.quote blockquote {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-family: inherit;
+  font-size: 1em;
+  font-weight: 600;
+  line-height: 1.28;
+}
+
+.quote figcaption {
+  margin-top: 0.3em;
+  color: #3c3c4399;
+  font-size: 0.8em;
+  font-weight: 500;
+  text-align: inherit;
+}
+
+@keyframes quote-in {
+  from {
+    opacity: 0;
+    translate: 0 0.5em;
+  }
 }
 
 /* iPhone lock screen (sized from the phone's width, like the phone itself). */
@@ -698,6 +729,12 @@ a:is(:hover, :focus-visible) .phone-showcase .is-right {
   position: absolute;
   inset: 0;
   color: #fff;
+  letter-spacing: -0.01em;
+}
+
+.lock_wallpaper {
+  object-fit: cover;
+  object-position: center bottom;
 }
 
 .phone_statusbar.is-light {
@@ -705,53 +742,63 @@ a:is(:hover, :focus-visible) .phone-showcase .is-right {
   color: #fff;
 }
 
-.lock_clock {
+.lock_date,
+.lock_time {
   position: absolute;
-  top: 14cqw;
   left: 0;
   right: 0;
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  gap: 1.5cqw;
-  text-shadow: 0 0.4cqw 3cqw #00000026;
+  text-shadow: 0 0.3cqw 2.5cqw #0000001f;
 }
 
 .lock_date {
+  top: 13.5cqw;
+  gap: 1.4cqw;
   font-size: 4.4cqw;
-  font-weight: var(--_typography---font-weight--semibold);
-  opacity: 0.9;
+  font-weight: 600;
+}
+
+.lock_date svg {
+  width: 5.4cqw;
+  fill: currentColor;
 }
 
 .lock_time {
-  font-size: 24cqw;
-  font-weight: var(--_typography---font-weight--semibold);
-  letter-spacing: -0.03em;
-  line-height: 0.9;
+  top: 17cqw;
+  font-size: 25cqw;
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 1;
+}
+
+/* The quote with the notification under it, below the clock and clear of the chair. */
+.lock_stack {
+  position: absolute;
+  top: 47cqw;
+  left: 4.5cqw;
+  right: 4.5cqw;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5cqw;
+}
+
+.lock_quote {
+  padding: 0.9em 1.25em;
+  border-radius: 1.5em;
+  font-size: 4cqw;
+  text-align: center;
 }
 
 .lock_note {
-  position: absolute;
-  left: 3.5cqw;
-  right: 3.5cqw;
-  bottom: 30cqw;
   display: flex;
   align-items: center;
-  gap: 3cqw;
-  padding: 3.2cqw;
-  border-radius: 6cqw;
-  background-color: #ffffff5c;
-  color: #111;
+  gap: 0.85em;
+  padding: 0.9em;
+  border-radius: 1.7em;
   font-size: 3.5cqw;
   line-height: 1.3;
-  -webkit-backdrop-filter: blur(4cqw) saturate(1.4);
-  backdrop-filter: blur(4cqw) saturate(1.4);
-}
-
-.lock_note .app-icon {
-  width: 10cqw;
-  border-radius: 2.4cqw;
-  font-size: 5cqw;
 }
 
 .lock_note-text,
@@ -768,11 +815,33 @@ a:is(:hover, :focus-visible) .phone-showcase .is-right {
   gap: 1em;
 }
 
+.lock_note-head b,
+.desktop_note-head b {
+  font-weight: 600;
+}
+
 .lock_note-head span,
 .desktop_note-head span {
   opacity: 0.55;
 }
 
+/* App icon: the project's initial on a squircle in its colour. */
+.app-icon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 10cqw;
+  aspect-ratio: 1;
+  border-radius: 22.5%;
+  background: linear-gradient(150deg, color-mix(in srgb, var(--showcase) 55%, #fff), var(--showcase));
+  box-shadow: inset 0 0.2cqw 0 #ffffff40;
+  color: #fff;
+  font-size: 5cqw;
+  font-weight: 600;
+  line-height: 1;
+}
+
+/* Flashlight and camera on clear glass. */
 .lock_btn {
   position: absolute;
   bottom: 8cqw;
@@ -780,10 +849,12 @@ a:is(:hover, :focus-visible) .phone-showcase .is-right {
   place-items: center;
   width: 12cqw;
   aspect-ratio: 1;
+  border: 0.25cqw solid #ffffff4d;
   border-radius: 50%;
-  background-color: #0000004d;
-  -webkit-backdrop-filter: blur(3cqw);
-  backdrop-filter: blur(3cqw);
+  background-color: #ffffff38;
+  box-shadow: inset 0 0.3cqw 0.5cqw #ffffff59;
+  -webkit-backdrop-filter: blur(3cqw) saturate(1.6);
+  backdrop-filter: blur(3cqw) saturate(1.6);
 }
 
 .lock_btn.is-left {
@@ -820,19 +891,25 @@ a:is(:hover, :focus-visible) .phone-showcase .is-right {
 .desktop {
   position: absolute;
   inset: -1.6cqw 0 0;
-  color: #fff;
+  color: #1d1d1f;
+  letter-spacing: -0.01em;
+}
+
+.desktop_wallpaper {
+  object-fit: cover;
 }
 
 .desktop_menubar {
+  position: relative;
   display: flex;
   justify-content: space-between;
   align-items: center;
   height: 1.6cqw;
   padding: 0 1.2cqw;
-  background-color: #00000026;
+  background-color: #ffffff47;
   font-size: 0.72cqw;
-  -webkit-backdrop-filter: blur(1cqw);
-  backdrop-filter: blur(1cqw);
+  -webkit-backdrop-filter: blur(1cqw) saturate(1.6);
+  backdrop-filter: blur(1cqw) saturate(1.6);
 }
 
 .desktop_menus {
@@ -851,26 +928,96 @@ a:is(:hover, :focus-visible) .phone-showcase .is-right {
   fill: currentColor;
 }
 
+/* Desktop widgets down the left, in the open sky. */
+.desktop_widgets {
+  position: absolute;
+  top: 3.2cqw;
+  left: 1.6cqw;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1cqw;
+  width: 19cqw;
+}
+
+.desktop_cal {
+  display: flex;
+  flex-direction: column;
+  width: 9cqw;
+  aspect-ratio: 1;
+  padding: 1em;
+  border-radius: 1.5em;
+  font-size: 0.8cqw;
+  line-height: 1.2;
+}
+
+.desktop_cal-day {
+  color: #ff3b30;
+  font-size: 0.85em;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.desktop_cal-date {
+  font-size: 3.6em;
+  font-weight: 300;
+  line-height: 1;
+}
+
+.desktop_cal-weather {
+  display: flex;
+  align-items: center;
+  gap: 0.3em;
+  margin-top: auto;
+  color: #3c3c43b3;
+  font-size: 0.85em;
+  font-weight: 500;
+}
+
+.desktop_cal-weather svg {
+  width: 1.3em;
+  fill: currentColor;
+}
+
+.desktop_quote {
+  padding: 1em 1.2em;
+  border-radius: 1.3em;
+  font-size: 0.95cqw;
+}
+
 .desktop_note {
   position: absolute;
   top: 2.6cqw;
   right: 1cqw;
   display: flex;
   align-items: center;
-  gap: 0.8cqw;
+  gap: 1em;
   width: 21cqw;
-  padding: 0.8cqw;
-  border-radius: 1.1cqw;
-  background-color: #f5f5f5c7;
-  color: #1d1d1f;
+  padding: 1em;
+  border-radius: 1.4em;
   font-size: 0.78cqw;
   line-height: 1.3;
-  box-shadow: 0 0.4cqw 1.5cqw #00000026;
-  -webkit-backdrop-filter: blur(1.5cqw);
-  backdrop-filter: blur(1.5cqw);
 }
 
 .desktop_note .dock-icon {
+  width: 2.6cqw;
+}
+
+/* The Dock is clearer glass than the cards, as on a real Mac. */
+.desktop_dock {
+  position: absolute;
+  bottom: 0.7cqw;
+  left: 50%;
+  display: flex;
+  gap: 0.45em;
+  padding: 0.45em 0.45em 0.7em;
+  border-radius: 1.3em;
+  background: #ffffff4d;
+  font-size: 1cqw;
+  translate: -50% 0;
+}
+
+.dock-icon {
   width: 2.6cqw;
 }
 
@@ -941,7 +1088,7 @@ a:is(:hover, :focus-visible) .phone-showcase .is-right {
   width: 0.28cqw;
   aspect-ratio: 1;
   border-radius: 50%;
-  background-color: #fff;
+  background-color: #1d1d1fa6;
   translate: -50% 0;
 }
 
@@ -1345,7 +1492,6 @@ a:is(:hover, :focus-visible) .store-showcase_phone {
   overflow: clip;
 }
 
-.project_stage.is-shopify,
 .project_stage.is-photo {
   padding: 0;
   background: none;
@@ -1489,9 +1635,22 @@ a:is(:hover, :focus-visible) .store-showcase_phone {
   width: min(100%, 1150px, calc((100vh - 12rem) / 0.62));
 }
 
+/* The phone's pill sits in the open sky, between the notification and the chair. */
+.phone-demo .device-open {
+  padding-top: 8%;
+}
+
 .mac-demo .device-open {
   padding: 0 0 6%;
   border-radius: var(--border-radius--large);
+}
+
+/* Up in the sky between the widgets and the notification, clear of the chair. */
+@media (min-width: 768px) {
+  .mac-demo .device-open {
+    place-items: start center;
+    padding: 8% 0 0;
+  }
 }
 
 /* ---------- Full-screen device view (DeviceDialog) ---------- */
@@ -1766,7 +1925,66 @@ a:is(:hover, :focus-visible) .store-showcase_phone {
   }
 }
 
-/* Shopify theme-preview demo (stores) */
+/* Shopify stores: a MacBook and an iPhone on their home screens; the theme preview opens full screen. */
+
+.store-demo {
+  display: flex;
+  justify-content: center;
+}
+
+.store-demo_device {
+  position: relative;
+  width: min(100%, 1100px, calc((100vh - 12rem) / 0.54));
+}
+
+.store-demo_mac {
+  width: 86%;
+}
+
+.store-demo_phone {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  height: 80%;
+}
+
+/* The pill is centred on the MacBook (the left 86%). */
+.store-demo .device-open {
+  padding: 0 14% 6% 0;
+  border-radius: var(--border-radius--large);
+}
+
+@media (min-width: 768px) {
+  .store-demo .device-open {
+    place-items: start center;
+    padding: 7% 14% 0 0;
+  }
+}
+
+/* Full screen: the preview fills the space under the title and close button. */
+.device-full.is-store {
+  padding: 5.5rem 1.5rem 1.5rem;
+}
+
+.device-full_store {
+  position: relative;
+  width: min(100%, 110rem);
+  height: 100%;
+  box-shadow: 0 2rem 4rem #00000026;
+}
+
+.device-full_store .shopify-preview_canvas {
+  flex: 1;
+  min-height: 0;
+  padding: 1.5rem;
+}
+
+.device-full_store .shopify-preview_desktop,
+.device-full_store .shopify-preview_phone {
+  height: 100%;
+}
+
+/* Shopify theme-preview viewer */
 
 .shopify-preview {
   display: flex;
@@ -1777,6 +1995,7 @@ a:is(:hover, :focus-visible) .store-showcase_phone {
 }
 
 .shopify-preview_bar {
+  position: relative;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -1877,6 +2096,17 @@ a:is(:hover, :focus-visible) .store-showcase_phone {
   background-color: #303030;
   color: #b5b5b5;
   font-weight: var(--_typography---font-weight--medium);
+}
+
+.shopify-preview_progress {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background-color: #29c78c;
+  opacity: 0;
+  transform-origin: 0 50%;
 }
 
 .shopify-preview_canvas {
@@ -2032,6 +2262,14 @@ a:is(:hover, :focus-visible) .store-showcase_phone {
   .shopify-preview_canvas {
     min-height: auto;
     padding: 1.25rem;
+  }
+
+  .device-full.is-store {
+    padding: 4.75rem 1rem 1rem;
+  }
+
+  .device-full_store .shopify-preview_canvas {
+    padding: 1rem;
   }
 
   .shopify-preview_desktop {
@@ -2667,7 +2905,8 @@ a:is(:hover, :focus-visible) .store-showcase_phone {
   .home-header_contact-dot-scale,
   .button-secondary:hover .button_dot-scale,
   .journey_bg-year-text,
-  .journey_counter-current {
+  .journey_counter-current,
+  .quote {
     animation: none;
   }
 }
