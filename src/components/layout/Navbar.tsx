@@ -15,7 +15,11 @@ export function Navbar() {
                 <Wordmark className="navbar_wordmark" />
               </Link>
               <div className="navbar_creative">
-                <img src="/brand/barcode.svg" alt="" width={183} height={86} className="navbar_barcode" />
+                <svg className="navbar_mark" viewBox="0 0 22 22" aria-hidden="true">
+                  <rect x="3" y="3" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.25" />
+                  {[3, 19].flatMap((x) => [3, 19].map((y) => <rect key={`${x}-${y}`} x={x - 2} y={y - 2} width="4" height="4" className="is-handle" stroke="currentColor" strokeWidth="1.25" />))}
+                  <rect className="is-accent" x="8" y="8" width="6" height="6" />
+                </svg>
                 <div className="navbar_creative-text">{brand.tagline}</div>
               </div>
             </div>

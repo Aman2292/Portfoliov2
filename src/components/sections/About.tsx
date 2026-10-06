@@ -1,5 +1,5 @@
 import { about } from "@/content/site";
-import { BackgroundVideo } from "@/components/ui/BackgroundVideo";
+import { AboutGlow } from "./AboutGlow";
 import { Button } from "@/components/ui/Button";
 import { Label } from "@/components/ui/Label";
 import { Wordmark } from "@/components/ui/Wordmark";
@@ -11,7 +11,7 @@ export function About() {
       <div className="padding-global is-tiny tablet-bigger">
         <div className="home-about_component">
           <div className="home-about_video-wrap" data-reveal>
-            <BackgroundVideo className="home-about_video" src={about.video.src} poster={about.video.poster} lazy data-parallax="scale" />
+            <AboutGlow />
             <div className="home-about_quote-wrap">
               <blockquote className="home-about_quote">{about.quote}</blockquote>
               <div className="home-about_quote-author">

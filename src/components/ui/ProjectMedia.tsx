@@ -21,7 +21,7 @@ export function ProjectMedia({
   preload?: boolean;
 }) {
   const alt = `${project.title} preview`;
-  const color = project.color ?? "#632f1b";
+  const color = project.color ?? "#2c4bff";
   switch (deviceFor(project)) {
     case "phone":
       return <PhoneShowcase screens={project.screens!} alt={alt} sizes="(max-width: 991px) 45vw, 20vw" color={color} />;

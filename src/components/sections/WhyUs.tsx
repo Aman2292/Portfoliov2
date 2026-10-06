@@ -3,6 +3,7 @@ import { Fragment } from "react";
 import { whyUs } from "@/content/site";
 import { Button } from "@/components/ui/Button";
 import { Label } from "@/components/ui/Label";
+import { ProcessStairs } from "./ProcessStairs";
 
 export function WhyUs() {
   const { team, chat, process: processCard } = whyUs;
@@ -27,23 +28,26 @@ export function WhyUs() {
 
       <div className="padding-global is-tiny">
         <div className="home-grid_component">
-          {/* Team: two counter-rotating rings of avatars */}
-          <div className="home-grid_team is-span-rows" data-reveal>
-            <h4 className="home-grid_team-heading">{team.heading}</h4>
-            <div className="home-grid_circle-1" aria-hidden="true">
-              {team.outerRing.map((member, i) => (
-                <Image key={i} src={member} alt="" className={`home-grid_member _${i + 1}`} sizes="80px" />
-              ))}
-            </div>
-            <div className="home-grid_circle-2" aria-hidden="true">
-              {team.innerRing.map((member, i) => (
-                <Image key={i} src={member} alt="" className={`home-grid_member-in _${i + 1}`} sizes="80px" />
-              ))}
+          {/* Team: two rings of avatars on crossing orbital planes; the heading sits in the same 3D
+              space, so avatars pass in front of it and behind it. */}
+          <div className="home-grid_team is-span-rows" data-reveal data-tilt>
+            <div className="home-grid_orbit">
+              <h4 className="home-grid_team-heading">{team.heading}</h4>
+              <div className="home-grid_circle-1" aria-hidden="true">
+                {team.outerRing.map((member, i) => (
+                  <Image key={i} src={member} alt="" className={`home-grid_member _${i + 1}`} sizes="80px" />
+                ))}
+              </div>
+              <div className="home-grid_circle-2" aria-hidden="true">
+                {team.innerRing.map((member, i) => (
+                  <Image key={i} src={member} alt="" className={`home-grid_member-in _${i + 1}`} sizes="80px" />
+                ))}
+              </div>
             </div>
           </div>
 
           {/* Chat: bubbles pop in one after another (see data-chat in ScrollAnimations) */}
-          <div className="home-grid_chat" data-reveal>
+          <div className="home-grid_chat" data-reveal data-tilt>
             <div className="home-grid_label">{chat.label}</div>
             <div className="home-grid_chat-in" data-chat>
               <div className="home-grid_chat-group _1">
@@ -61,13 +65,8 @@ export function WhyUs() {
             </div>
           </div>
 
-          <div className="home-grid_pricing" data-reveal>
-            <Image
-              src={processCard.image}
-              alt=""
-              className="home-grid_pricing-img"
-              sizes="(max-width: 479px) 80vw, (max-width: 991px) 60vw, 30vw"
-            />
+          <div className="home-grid_pricing" data-reveal data-tilt>
+            <ProcessStairs className="home-grid_pricing-img" />
             <h4 className="home-grid_pricing-title">{processCard.title}</h4>
             <Button href={processCard.cta.href} variant="small">
               {processCard.cta.label}

@@ -5,31 +5,33 @@
  * Links: "/applications" opens a page, "#contact" scrolls to a section on the current page,
  * "/#work" scrolls to a home-page section from anywhere, and "#" alone is a placeholder that does nothing.
  *
- * Still to personalise: brand.email, the LinkedIn/X links, your photo (contact-portrait.webp),
- * the projects list, the toolbox and the journey milestones (those are sample entries).
+ * Still to personalise: brand.email, the LinkedIn/X links, your photo (portrait.webp is a lettermark
+ * placeholder and people/aman.webp its small round version), the projects list, the toolbox and the
+ * journey milestones (those are sample entries).
+ *
+ * The line drawings in assets/images (services, journey, trail, people...) are original artwork made
+ * for this site in the blueprint palette; swap any of them for real photos of your work.
  */
 import type { StaticImageData } from "next/image";
 
-import contactPortrait from "@/assets/images/contact-portrait.webp";
-import menuContact from "@/assets/images/menu-contact.png";
-import bronx from "@/assets/images/work/bronx.webp";
-import nexora from "@/assets/images/work/nexora.webp";
-import carlo from "@/assets/images/work/carlo.webp";
-import webDesign from "@/assets/images/services/web-design.jpg";
-import branding from "@/assets/images/services/branding.webp";
-import contentImg from "@/assets/images/services/content.jpg";
-import socialMedia from "@/assets/images/services/social-media.jpg";
-import showreel from "@/assets/images/showreel.png";
-import glass from "@/assets/images/glass.webp";
-import member1 from "@/assets/images/team/member-1.webp";
-import member2 from "@/assets/images/team/member-2.webp";
-import member3 from "@/assets/images/team/member-3.webp";
-import member4 from "@/assets/images/team/member-4.webp";
-import member5 from "@/assets/images/team/member-5.webp";
-import member6 from "@/assets/images/team/member-6.webp";
-import member7 from "@/assets/images/team/member-7.webp";
-import avatarClient from "@/assets/images/team/avatar-client.webp";
-import nexoraHome from "@/assets/images/sites/nexora-home.webp";
+import portrait from "@/assets/images/portrait.webp";
+import avatar from "@/assets/images/people/aman.webp";
+import menuContact from "@/assets/images/menu-contact.webp";
+import appsPlate from "@/assets/images/services/apps.webp";
+import websitesPlate from "@/assets/images/services/websites.webp";
+import shopifyPlate from "@/assets/images/services/shopify.webp";
+import showreel from "@/assets/images/showreel.webp";
+import lumen from "@/assets/images/lumen.webp";
+import drift from "@/assets/images/drift.webp";
+import journeyRoute from "@/assets/images/journey-route.webp";
+import personJM from "@/assets/images/people/jm.webp";
+import personSK from "@/assets/images/people/sk.webp";
+import personRP from "@/assets/images/people/rp.webp";
+import personLT from "@/assets/images/people/lt.webp";
+import personNV from "@/assets/images/people/nv.webp";
+import personDA from "@/assets/images/people/da.webp";
+import personEC from "@/assets/images/people/ec.webp";
+import personPH from "@/assets/images/people/ph.webp";
 import solenceHome from "@/assets/images/sites/solence-home.webp";
 import orbitHome from "@/assets/images/sites/orbit-home.webp";
 import carloDesktop from "@/assets/images/sites/carlo-desktop.webp";
@@ -43,11 +45,20 @@ import bronxHome from "@/assets/images/apps/bronx-home.webp";
 import bronxProduct from "@/assets/images/apps/bronx-product.webp";
 import antraSummary from "@/assets/images/apps/antra-summary.webp";
 import antraWorkout from "@/assets/images/apps/antra-workout.webp";
-import trail1 from "@/assets/images/trail/trail-1.webp";
-import trail2 from "@/assets/images/trail/trail-2.webp";
-import trail3 from "@/assets/images/trail/trail-3.webp";
-import trail4 from "@/assets/images/trail/trail-4.webp";
-import trail5 from "@/assets/images/trail/trail-5.webp";
+import milestoneCode from "@/assets/images/journey/code.webp";
+import milestoneWebsite from "@/assets/images/journey/website.webp";
+import milestoneClient from "@/assets/images/journey/client.webp";
+import milestoneStore from "@/assets/images/journey/store.webp";
+import milestoneApp from "@/assets/images/journey/app.webp";
+import milestoneNext from "@/assets/images/journey/next.webp";
+import reactLogo from "@/assets/images/stack/react.svg";
+import nextLogo from "@/assets/images/stack/nextdotjs.svg";
+import figmaLogo from "@/assets/images/stack/figma.svg";
+import shopifyLogo from "@/assets/images/stack/shopify.svg";
+import javascriptLogo from "@/assets/images/stack/javascript.svg";
+import typescriptLogo from "@/assets/images/stack/typescript.svg";
+import nodeLogo from "@/assets/images/stack/nodedotjs.svg";
+import gitLogo from "@/assets/images/stack/git.svg";
 
 export type Link = { label: string; href: string };
 export type Photo = { src: StaticImageData; alt: string };
@@ -90,25 +101,25 @@ export const categories = [
     slug: "applications",
     label: "Applications",
     description: "Mobile apps for iOS and Android that I've designed and built — from the first prototype to launch.",
-    cover: bronx,
+    cover: appsPlate,
   },
   {
     slug: "websites",
     label: "Websites",
     description: "Fast, responsive websites and web apps — landing pages, business sites, dashboards and portfolios.",
-    cover: nexora,
+    cover: websitesPlate,
   },
   {
     slug: "shopify",
     label: "Shopify",
     description: "Shopify stores, custom themes and storefront work that help brands sell online.",
-    cover: carlo,
+    cover: shopifyPlate,
   },
   {
     slug: "personal-projects",
     label: "Personal Projects",
     description: "Experiments and side projects — the things I build to learn something new.",
-    cover: showreel,
+    cover: lumen,
   },
 ] as const;
 
@@ -171,18 +182,6 @@ export const projects: Project[] = [
     tags: ["iOS", "Health"],
     year: "2024",
     color: "#1c1c1e",
-  },
-  {
-    title: "Nexora",
-    category: "websites",
-    pages: [{ label: "Home", desktop: nexoraHome }],
-    domain: "nexora.studio",
-    description: "A marketing website for a creative studio.",
-    overview: "Bold typography, a work showcase and scroll-driven motion, built to be fast and easy for the team to update.",
-    role: "Design & development",
-    tags: ["Design", "Development"],
-    year: "2025",
-    color: "#1b2a3a",
   },
   {
     title: "Velith",
@@ -258,7 +257,7 @@ export const projects: Project[] = [
   {
     title: "Lumen",
     category: "personal-projects",
-    image: showreel,
+    image: lumen,
     description: "An experiment with light, motion and WebGL.",
     tags: ["Experiment"],
     year: "2025",
@@ -267,7 +266,7 @@ export const projects: Project[] = [
   {
     title: "Drift",
     category: "personal-projects",
-    image: socialMedia,
+    image: drift,
     description: "A small side project to learn something new.",
     tags: ["Side project"],
     year: "2024",
@@ -307,16 +306,15 @@ export const menu = {
  * ------------------------------------------------------------------------- */
 
 export const hero = {
-  title: brand.name,
-  subtitle: brand.role,
-  video: { src: "/videos/hero.mp4", poster: "/videos/hero-poster.jpg" },
+  title: "Design",
+  subtitle: "& Build",
   scrollNote: "Scroll to explore —",
   services: categories.map((category) => category.label),
   label: `Hi, I'm ${brand.name}`,
   subhead: "I design and build",
   rotatingWords: ["Applications.", "Websites.", "Shopify stores."],
   contact: {
-    photo: { src: contactPortrait, alt: `Portrait of ${brand.name}` } satisfies Photo,
+    photo: { src: avatar, alt: "" } satisfies Photo,
     cta: "Contact me",
     role: "Let's build something together",
     details: [
@@ -340,19 +338,18 @@ export const whyUs = {
   heading: "I help founders and businesses turn ideas into polished products — with clarity and care.",
   team: {
     heading: "Great people I've worked with",
-    outerRing: [member1, member2, member3, member4],
-    innerRing: [member5, member6, member7],
+    outerRing: [personJM, personSK, personRP, personLT],
+    innerRing: [personNV, personDA, personEC],
   },
   chat: {
     label: "Real-time collaboration",
-    incoming: { avatar: avatarClient, messages: ["Hey!", "The website looks awesome", "Can we update the homepage banner?"] },
-    reply: { avatar: contactPortrait, messages: ["Hi Philip!", "Sure, I'll have it updated today"] },
+    incoming: { avatar: personPH, messages: ["Hey!", "The website looks awesome", "Can we update the homepage banner?"] },
+    reply: { avatar, messages: ["Hi Philip!", "Sure, I'll have it updated today"] },
   },
-  process: { title: "From idea to launch, step by step", image: glass, cta: { label: "Start a project", href: "#contact" } },
+  process: { title: "From idea to launch, step by step", cta: { label: "Start a project", href: "#contact" } },
 };
 
 export const about = {
-  video: { src: "/videos/about.mp4", poster: "/videos/about-poster.jpg" },
   quote: "“Good software feels effortless — and that takes a lot of care behind the scenes.”",
   author: brand.name,
   role: brand.role,
@@ -371,19 +368,19 @@ export const services = {
     {
       title: "Applications",
       tags: ["iOS", "Android", "Cross-platform", "App Store launch", "Prototypes"],
-      photo: { src: contentImg, alt: "A close up of a person typing on a laptop." },
+      photo: { src: appsPlate, alt: "Line drawing of a phone app wireframe with its 390 by 844 dimensions." },
       text: "iOS and Android apps with smooth, native-feeling UX, clean architecture and a focus on performance.",
     },
     {
       title: "Websites",
       tags: ["Landing pages", "Business sites", "Web apps", "Portfolios", "Animations"],
-      photo: { src: webDesign, alt: "A laptop showing a website on a wooden table." },
+      photo: { src: websitesPlate, alt: "Line drawing of a website wireframe in a browser window." },
       text: "Responsive websites and web apps with thoughtful motion — built to load fast and make a great first impression.",
     },
     {
       title: "Shopify",
       tags: ["Store setup", "Custom themes", "Liquid", "Integrations", "Speed"],
-      photo: { src: branding, alt: "A close-up of a person in a grey puffer jacket." },
+      photo: { src: shopifyPlate, alt: "Line drawing of a shopping bag on a yellow grid." },
       text: "Shopify stores built and customised end to end — themes, sections and integrations that help brands sell.",
     },
   ] satisfies { title: string; tags: string[]; photo: Photo; text: string }[],
@@ -395,7 +392,7 @@ export const showreelSection = {
   leftHeading: `©${CURRENT_YEAR}`,
   rightHeading: "Showreel",
   playLabel: "Play showreel",
-  photo: { src: showreel, alt: "A person standing in a dark room lit by streaks of light." } satisfies Photo,
+  photo: { src: showreel, alt: "Blueprint drawing of a phone, a website and a shopping bag, titled Design & Build." } satisfies Photo,
   /** Any embeddable video URL (YouTube, Vimeo...) — swap in your own reel. */
   videoEmbedUrl: "https://www.youtube.com/embed/p1CLeATYZUQ?autoplay=1&rel=0",
   videoPageUrl: "https://www.youtube.com/watch?v=p1CLeATYZUQ",
@@ -464,7 +461,7 @@ export const aboutPage = {
   heading: "About me.",
   label: `Hi, I'm ${brand.name}`,
   intro: "A developer building mobile apps, websites and Shopify stores.",
-  portrait: { src: contactPortrait, alt: `Portrait of ${brand.name}` } satisfies Photo,
+  portrait: { src: portrait, alt: `Lettermark for ${brand.name}` } satisfies Photo,
   lead: "I build digital products that look good, feel fast and are easy to use.",
   bio: [
     "I enjoy turning ideas into real products — whether that's an app people use every day, a website that makes a great first impression or a Shopify store that sells.",
@@ -501,7 +498,7 @@ export const aboutPage = {
     heading: "How I got here — from my first line of code to today.",
     cta: "Explore my journey",
     href: "/journey",
-    image: socialMedia,
+    image: journeyRoute,
   },
 };
 
@@ -527,12 +524,12 @@ export const journey = {
   scrollNote: "Keep scrolling to travel through time —",
   // Sample milestones — replace them with your real story (oldest first).
   milestones: [
-    { year: "2019", title: "Wrote my first line of code", place: "Self-taught", description: MILESTONE_TEXT, tags: ["HTML", "CSS"], image: trail1 },
-    { year: "2020", title: "Built my first website", place: "Side project", description: MILESTONE_TEXT, tags: ["JavaScript"], image: trail2 },
-    { year: "2021", title: "Landed my first client", place: "Freelance", description: MILESTONE_TEXT, tags: ["Websites"], image: trail4 },
-    { year: "2022", title: "Launched my first Shopify store", place: "Freelance", description: MILESTONE_TEXT, tags: ["Shopify", "Liquid"], image: carlo },
-    { year: "2024", title: "Shipped my first app", place: "Freelance", description: MILESTONE_TEXT, tags: ["Applications"], image: trail5 },
-    { year: "Now", title: "Building what's next", place: "Open to new projects", description: MILESTONE_TEXT, tags: ["Apps", "Websites", "Shopify"], image: nexora },
+    { year: "2019", title: "Wrote my first line of code", place: "Self-taught", description: MILESTONE_TEXT, tags: ["HTML", "CSS"], image: milestoneCode },
+    { year: "2020", title: "Built my first website", place: "Side project", description: MILESTONE_TEXT, tags: ["JavaScript"], image: milestoneWebsite },
+    { year: "2021", title: "Landed my first client", place: "Freelance", description: MILESTONE_TEXT, tags: ["Websites"], image: milestoneClient },
+    { year: "2022", title: "Launched my first Shopify store", place: "Freelance", description: MILESTONE_TEXT, tags: ["Shopify", "Liquid"], image: milestoneStore },
+    { year: "2024", title: "Shipped my first app", place: "Freelance", description: MILESTONE_TEXT, tags: ["Applications"], image: milestoneApp },
+    { year: "Now", title: "Building what's next", place: "Open to new projects", description: MILESTONE_TEXT, tags: ["Apps", "Websites", "Shopify"], image: milestoneNext },
   ] satisfies Milestone[],
   stats: {
     label: "In numbers",
@@ -552,8 +549,8 @@ export const cta = {
   heading: "Let's build something together.",
   button: { label: "Get in touch", href: `mailto:${brand.email}` },
   note: "Move your mouse —",
-  /** Images that follow the cursor over the section. */
-  trail: [trail1, trail2, trail3, trail4, trail5],
+  /** Tech-stack logos that follow the cursor over the section (tiles in assets/images/stack). */
+  trail: [reactLogo, nextLogo, figmaLogo, shopifyLogo, javascriptLogo, typescriptLogo, nodeLogo, gitLogo],
 };
 
 export const footer = {

@@ -1,6 +1,6 @@
 import { hero } from "@/content/site";
-import { BackgroundVideo } from "@/components/ui/BackgroundVideo";
 import { NoteMarquee } from "@/components/ui/NoteMarquee";
+import { HeroBlueprint } from "./HeroBlueprint";
 import { HeroContactCard } from "./HeroContactCard";
 
 export function Hero() {
@@ -24,9 +24,9 @@ export function Hero() {
 
       <div className="home-header_component" data-intro>
         <div className="home-header_content">
-          <BackgroundVideo className="home-header_video" src={hero.video.src} poster={hero.video.poster}>
+          <HeroBlueprint className="home-header_video hero-blueprint">
             <NoteMarquee text={hero.scrollNote} />
-          </BackgroundVideo>
+          </HeroBlueprint>
 
           <div className="home-header_services">
             {hero.services.map((service) => (

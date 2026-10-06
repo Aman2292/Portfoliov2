@@ -39,7 +39,7 @@ export function ProjectDetail({ project }: { project: Project }) {
   ].filter((fact): fact is { label: string; value: string } => Boolean(fact));
 
   return (
-    <section className="section_project" style={{ "--showcase": project.color ?? "#632f1b" } as CSSProperties}>
+    <section className="section_project" style={{ "--showcase": project.color ?? "#2c4bff" } as CSSProperties}>
       <div className="padding-section-small is-mobile-medium" />
       <div className="padding-global">
         <div className="container-medium">

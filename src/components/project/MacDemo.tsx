@@ -10,6 +10,16 @@ import { cx } from "@/lib/utils";
 import { DeviceDialog, OpenFullscreen, type DialogAnimation } from "./DeviceDialog";
 
 /**
+ * The base normally sits in front of the lid (its front edge hides the lid's bottom corners), but a lid
+ * that is nearly shut lies on top of the base, so the order flips while the lid is past ~70°.
+ */
+const stackLid = (dialog: HTMLElement) => () => {
+  const lid = dialog.querySelector<HTMLElement>(".mac_lid");
+  const base = dialog.querySelector<HTMLElement>(".mac_base");
+  if (lid && base) base.style.zIndex = Number(gsap.getProperty(lid, "rotationX")) < -70 ? "0" : "";
+};
+
+/**
  * Full screen: the MacBook rises in closed, then the lid swings open and the screen wakes up.
  * Once open the lid goes flat (it only needs 3D while it moves): Chrome won't wheel-scroll the
  * page inside a preserve-3d element.
@@ -21,12 +31,14 @@ const openLid: DialogAnimation = (dialog) => {
       onComplete: () => {
         gsap.set(q(".device-full_mac, .mac_lid, .mac_screen"), { clearProps: "transform,filter" });
         gsap.set(q(".mac_lid"), { transformStyle: "flat" });
+        gsap.set(q(".mac_base"), { clearProps: "zIndex" });
       },
     })
+    .set(q(".mac_base"), { zIndex: 0 }, 0)
     .fromTo(q(".device-full_bg"), { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.out" }, 0)
     .fromTo(q(".device-full_head, .device-full_close"), { opacity: 0 }, { opacity: 1, duration: 0.5, stagger: 0.08 }, 0.3)
     .fromTo(q(".device-full_mac"), { y: "8vh", opacity: 0 }, { y: 0, opacity: 1, duration: 0.9, ease: EASE_OUT }, 0.1)
-    .fromTo(q(".mac_lid"), { rotateX: -89 }, { rotateX: 0, duration: 1.7, ease: "power3.inOut" }, 0.6)
+    .fromTo(q(".mac_lid"), { rotateX: -89 }, { rotateX: 0, duration: 1.7, ease: "power3.inOut", onUpdate: stackLid(dialog) }, 0.6)
     .fromTo(q(".mac_screen"), { filter: "brightness(0)" }, { filter: "brightness(1)", duration: 0.9, ease: "power2.out" }, "-=0.35")
     .fromTo(q(".device-full_hint"), { opacity: 0 }, { opacity: 1, duration: 0.5 }, "-=0.4");
 };
@@ -39,7 +51,7 @@ const closeLid: DialogAnimation = (dialog) => {
     .set(q(".mac_lid"), { transformStyle: "preserve-3d" }, 0)
     .to(q("[data-chrome]"), { opacity: 0, duration: 0.25 }, 0)
     .to(q(".mac_screen"), { filter: "brightness(0)", duration: 0.35, ease: "power2.in" }, 0)
-    .to(q(".mac_lid"), { rotateX: -89, duration: 0.8, ease: "power3.in" }, 0.1)
+    .to(q(".mac_lid"), { rotateX: -89, duration: 0.8, ease: "power3.in", onUpdate: stackLid(dialog) }, 0.1)
     .to(q(".device-full_mac"), { y: "6vh", opacity: 0, duration: 0.4, ease: "power2.in" }, 0.75)
     .to(q(".device-full_bg"), { opacity: 0, duration: 0.45, ease: "power2.inOut" }, 0.75);
 };

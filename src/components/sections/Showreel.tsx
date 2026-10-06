@@ -7,8 +7,8 @@ import { showreelSection as showreel } from "@/content/site";
 import { gsap, useGSAP } from "@/lib/gsap";
 
 /**
- * Sticky showreel: on desktop the card grows from a small frame to full screen as you scroll,
- * pushing the side headings out of view. Clicking opens the video in a modal dialog.
+ * Sticky showreel: the card grows from a small frame to full screen as you scroll, pushing the side
+ * headings out of view (phones use a smaller starting frame). Clicking opens the video in a modal dialog.
  */
 export function Showreel() {
   const ref = useRef<HTMLElement>(null);
@@ -20,17 +20,21 @@ export function Showreel() {
   useGSAP(
     () => {
       const mm = gsap.matchMedia();
-      mm.add("(min-width: 992px) and (prefers-reduced-motion: no-preference)", () => {
+      mm.add({ desktop: "(min-width: 992px)", motion: "(prefers-reduced-motion: no-preference)" }, (context) => {
         const root = ref.current;
-        if (!root) return;
+        const { desktop, motion } = context.conditions as { desktop: boolean; motion: boolean };
+        if (!root || !motion) return;
         const q = gsap.utils.selector(root);
+        const frame = desktop
+          ? { from: { width: "10vw", height: "6.5vh" }, to: { width: "100vw", height: "100vh", padding: "1.5rem" }, radius: "2rem" }
+          : { from: { width: "22vw", height: "5svh" }, to: { width: "100vw", height: "100svh", padding: "0.75rem" }, radius: "1.5rem" };
         gsap
           .timeline({
             defaults: { ease: "none", duration: 1 },
             scrollTrigger: { trigger: q(".showreel_wrap")[0], start: "top top", end: "bottom bottom", scrub: true },
           })
-          .fromTo(q(".showreel_lightbox"), { width: "10vw", height: "6.5vh", padding: 0 }, { width: "100vw", height: "100vh", padding: "1.5rem" }, 0)
-          .fromTo(q(".showreel_img-wrap"), { borderRadius: "0.75rem" }, { borderRadius: "2rem" }, 0)
+          .fromTo(q(".showreel_lightbox"), { ...frame.from, padding: 0 }, frame.to, 0)
+          .fromTo(q(".showreel_img-wrap"), { borderRadius: "0.75rem" }, { borderRadius: frame.radius }, 0)
           .fromTo(q(".showreel_img"), { scale: 1.25 }, { scale: 1 }, 0)
           .fromTo(q(".showreel_play-wrapper"), { opacity: 0, y: "2rem" }, { opacity: 1, y: 0, duration: 0.3, ease: "power2.out" }, 0.65)
           .to({}, { duration: 0.15 }); // hold the full-screen frame for a moment before scrolling on

@@ -7,7 +7,7 @@ import { EASE_IN_OUT, EASE_OUT, gsap, prefersReducedMotion, useGSAP } from "@/li
 import { markIntroDone } from "@/lib/intro";
 
 /**
- * Intro curtain: the logo fades in, then the curtain lifts (dragging its striped edge along)
+ * Intro curtain: the logo fades in, then the curtain lifts (dragging its ruler edge along)
  * and hands over to the hero intro ([data-intro] elements). It is rendered visible on the server
  * so the page never flashes before the animation; a CSS failsafe hides it if JS never runs.
  */
@@ -53,7 +53,7 @@ export function Preloader() {
   return (
     <div className="brand_wrap" ref={ref} aria-hidden="true">
       <Wordmark className="brand_logo" />
-      <img src="/brand/curtain-lines.png" alt="" className="brand_lines" />
+      <div className="brand_ruler" />
     </div>
   );
 }

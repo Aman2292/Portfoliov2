@@ -12,11 +12,10 @@ const pad = (n: number) => String(n).padStart(2, "0");
 
 /**
  * Journey timeline.
- *  - Desktop (with motion): the section pins and scrolling moves the milestones sideways. The active card
- *    lights up, a giant background year rolls to match, the progress bar fills, and the year ticks jump
- *    straight to a milestone. Cards tilt towards the cursor.
- *  - Phones/tablets: a vertical timeline whose line draws in as you scroll, lighting each milestone's dot.
- *  - No JS / reduced motion: the same vertical list, fully visible.
+ *  - With motion (every screen size): the section pins and scrolling moves the milestones sideways. The
+ *    active card lights up, a giant background year rolls to match, the progress bar fills, and the year
+ *    ticks jump straight to a milestone. Cards tilt towards a mouse cursor.
+ *  - No JS / reduced motion: a vertical list, fully visible.
  */
 export function JourneyTimeline({ milestones, note }: { milestones: Milestone[]; note: string }) {
   const ref = useRef<HTMLElement>(null);
@@ -33,56 +32,34 @@ export function JourneyTimeline({ milestones, note }: { milestones: Milestone[];
       const cards = gsap.utils.toArray<HTMLElement>(".journey_card", root);
 
       const mm = gsap.matchMedia();
-      mm.add(
-        { desktop: "(min-width: 992px)", motion: "(prefers-reduced-motion: no-preference)" },
-        (context) => {
-          const { desktop, motion } = context.conditions as { desktop: boolean; motion: boolean };
-          if (!motion) return;
+      mm.add("(prefers-reduced-motion: no-preference)", () => {
+        root.classList.add("is-horizontal");
+        const distance = () => track.scrollWidth - window.innerWidth;
+        const scrollTrigger = { trigger: pin, start: "top top", end: () => `+=${distance()}`, invalidateOnRefresh: true };
 
-          if (desktop) {
-            root.classList.add("is-horizontal");
-            const distance = () => track.scrollWidth - window.innerWidth;
-            const scrollTrigger = { trigger: pin, start: "top top", end: () => `+=${distance()}`, invalidateOnRefresh: true };
+        scroller.current = gsap.to(track, {
+          x: () => -distance(),
+          ease: "none",
+          scrollTrigger: { ...scrollTrigger, pin: true, scrub: 1, anticipatePin: 1 },
+        });
+        gsap.fromTo(".journey_progress-fill", { scaleX: 0 }, { scaleX: 1, ease: "none", scrollTrigger: { ...scrollTrigger, scrub: true } });
 
-            scroller.current = gsap.to(track, {
-              x: () => -distance(),
-              ease: "none",
-              scrollTrigger: { ...scrollTrigger, pin: true, scrub: 1, anticipatePin: 1 },
-            });
-            gsap.fromTo(".journey_progress-fill", { scaleX: 0 }, { scaleX: 1, ease: "none", scrollTrigger: { ...scrollTrigger, scrub: true } });
+        // The card crossing the middle of the screen is the active one.
+        cards.forEach((card, i) =>
+          ScrollTrigger.create({
+            trigger: card,
+            containerAnimation: scroller.current!,
+            start: "left 55%",
+            end: "right 45%",
+            onToggle: (self) => self.isActive && setActive(i),
+          }),
+        );
 
-            // The card crossing the middle of the screen is the active one.
-            cards.forEach((card, i) =>
-              ScrollTrigger.create({
-                trigger: card,
-                containerAnimation: scroller.current!,
-                start: "left 55%",
-                end: "right 45%",
-                onToggle: (self) => self.isActive && setActive(i),
-              }),
-            );
-
-            return () => {
-              scroller.current = null;
-              root.classList.remove("is-horizontal");
-            };
-          }
-
-          gsap.fromTo(
-            ".journey_axis-fill",
-            { scaleY: 0 },
-            { scaleY: 1, ease: "none", scrollTrigger: { trigger: track, start: "top 60%", end: "bottom 60%", scrub: true } },
-          );
-          cards.forEach((card, i) =>
-            ScrollTrigger.create({
-              trigger: card,
-              start: "top 60%",
-              end: "bottom 60%",
-              onToggle: (self) => self.isActive && setActive(i),
-            }),
-          );
-        },
-      );
+        return () => {
+          scroller.current = null;
+          root.classList.remove("is-horizontal");
+        };
+      });
     },
     { scope: ref },
   );

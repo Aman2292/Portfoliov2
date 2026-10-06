@@ -94,6 +94,20 @@ img {
   }
 }
 
+/* The curtain's bottom edge is a drafting ruler: a tick every 12px, a long one every 60px. */
+.brand_ruler {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  height: 1.5rem;
+  background-image:
+    repeating-linear-gradient(90deg, var(--_colors---primary--black) 0 2px, transparent 2px 60px),
+    repeating-linear-gradient(90deg, var(--_colors---primary--black) 0 1px, transparent 1px 12px);
+  background-size: 100% 100%, 100% 45%;
+  background-repeat: no-repeat;
+}
+
 /* ---------- Rolling link labels + accent dots ---------- */
 
 /* The page being viewed keeps its dot in the navbar and menu. */
@@ -185,6 +199,12 @@ img {
   animation: dot-pulse 2s ease-out infinite;
 }
 
+/* The card sits on the cobalt blueprint, so its "online" dot is signal yellow. */
+.home-header_contact-dot,
+.home-header_contact-dot-scale {
+  background-color: var(--_colors---primary--signal);
+}
+
 @keyframes dot-pulse {
   from {
     transform: scale(0);
@@ -213,6 +233,111 @@ img {
 }
 
 /* ---------- Hero ---------- */
+
+/* Blueprint backdrop (HeroBlueprint): cobalt paper with a 20px / 120px drafting grid. */
+.hero-blueprint {
+  --blueprint: var(--_colors---primary--accent);
+  overflow: hidden;
+  border-radius: inherit;
+  background-color: var(--blueprint);
+  background-image:
+    linear-gradient(#ffffff26 1px, transparent 1px),
+    linear-gradient(90deg, #ffffff26 1px, transparent 1px),
+    linear-gradient(#ffffff12 1px, transparent 1px),
+    linear-gradient(90deg, #ffffff12 1px, transparent 1px);
+  background-size: 120px 120px, 120px 120px, 20px 20px, 20px 20px;
+  background-position: center;
+}
+
+.blueprint_art {
+  position: absolute;
+  top: 8%;
+  left: 34%;
+  width: 52%;
+  height: 76%;
+  fill: none;
+  stroke: var(--_colors---primary--white);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  overflow: visible;
+}
+
+.blueprint_art .is-soft {
+  stroke: #ffffff9e;
+}
+
+.blueprint_art .is-faint {
+  stroke: #ffffff4d;
+}
+
+.blueprint_art .is-solid {
+  fill: var(--blueprint);
+}
+
+.blueprint_art .is-filled {
+  fill: var(--_colors---primary--white);
+}
+
+.blueprint_dim line {
+  stroke: #ffffff9e;
+  stroke-width: 1.1;
+}
+
+.blueprint_art text {
+  font-family: var(--_typography---font-family--detail);
+  font-size: 15px;
+  font-weight: var(--_typography---font-weight--medium);
+  text-anchor: middle;
+  dominant-baseline: middle;
+  stroke: none;
+  fill: #ffffff9e;
+}
+
+.blueprint_frame {
+  stroke: var(--_colors---primary--signal);
+  stroke-width: 1.6;
+}
+
+.blueprint_handle {
+  fill: var(--blueprint);
+  stroke: var(--_colors---primary--signal);
+  stroke-width: 1.6;
+}
+
+.blueprint_badge {
+  fill: var(--_colors---primary--signal);
+  stroke: none;
+}
+
+.blueprint_art .blueprint_badge-text {
+  fill: var(--_colors---primary--black);
+  font-weight: var(--_typography---font-weight--semibold);
+}
+
+@media (max-width: 991px) {
+  .blueprint_art {
+    top: 14%;
+    left: 22%;
+    width: 74%;
+    height: 62%;
+  }
+}
+
+/* Phones stack the headline over the contact card; the drawing sits in a wider gap between them. */
+@media (max-width: 479px) {
+  .home-header_bottom {
+    grid-row-gap: 14rem;
+  }
+
+  .blueprint_art {
+    top: auto;
+    bottom: 6.5rem;
+    left: 4%;
+    width: 92%;
+    height: 12.5rem;
+  }
+}
+
 
 /* Contact details stay collapsed until the card is hovered / toggled (HeroContactCard). */
 .home-header_infos {
@@ -310,20 +435,267 @@ img {
 
 /* ---------- Why us grid ---------- */
 
+/*
+ * Team card: the two rings lie on crossing orbital planes. Each ring spins in its own plane and its
+ * avatars undo the spin and the tilt (same rotations, reversed), so they always face the viewer while
+ * swinging in front of and behind the heading.
+ */
+.home-grid_team {
+  perspective: 900px;
+}
+
+.home-grid_orbit {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform-style: preserve-3d;
+}
+
 .home-grid_circle-1,
-.home-grid_member-in {
-  animation: spin 60s linear infinite;
-}
-
-/* Counter-rotate the avatars so they stay upright while the rings turn. */
-.home-grid_member,
 .home-grid_circle-2 {
-  animation: spin 60s linear infinite reverse;
+  transform-style: preserve-3d;
 }
 
-@keyframes spin {
+/* Wider rings than the flat template version, so the tilted orbits still fill the square card. */
+.home-grid_circle-1 {
+  width: 82%;
+}
+
+.home-grid_circle-2 {
+  width: 60%;
+}
+
+.home-grid_circle-1 {
+  transform: rotateY(-14deg) rotateX(62deg);
+  animation: orbit-outer 40s linear infinite;
+}
+
+.home-grid_member {
+  transform: rotateX(-62deg) rotateY(14deg);
+  animation: orbit-outer-face 40s linear infinite;
+}
+
+.home-grid_circle-2 {
+  transform: rotateY(32deg) rotateX(62deg);
+  animation: orbit-inner 30s linear infinite;
+}
+
+.home-grid_member-in {
+  transform: rotateX(-62deg) rotateY(-32deg);
+  animation: orbit-inner-face 30s linear infinite;
+}
+
+@keyframes orbit-outer {
+  from {
+    transform: rotateY(-14deg) rotateX(62deg) rotateZ(0deg);
+  }
   to {
-    transform: rotate(360deg);
+    transform: rotateY(-14deg) rotateX(62deg) rotateZ(360deg);
+  }
+}
+
+@keyframes orbit-outer-face {
+  from {
+    transform: rotateZ(0deg) rotateX(-62deg) rotateY(14deg);
+  }
+  to {
+    transform: rotateZ(-360deg) rotateX(-62deg) rotateY(14deg);
+  }
+}
+
+@keyframes orbit-inner {
+  from {
+    transform: rotateY(32deg) rotateX(62deg) rotateZ(0deg);
+  }
+  to {
+    transform: rotateY(32deg) rotateX(62deg) rotateZ(-360deg);
+  }
+}
+
+@keyframes orbit-inner-face {
+  from {
+    transform: rotateZ(0deg) rotateX(-62deg) rotateY(-32deg);
+  }
+  to {
+    transform: rotateZ(360deg) rotateX(-62deg) rotateY(-32deg);
+  }
+}
+
+/* Process card: a CSS 3D staircase (ProcessStairs). The floor is tipped back and turned, so
+   translateZ is "up"; each block shows its top, front and riser. */
+.process-stairs {
+  aspect-ratio: 1.15;
+  perspective: 1400px;
+  perspective-origin: 50% 25%;
+}
+
+.stairs_fit {
+  position: absolute;
+  left: 50%;
+  top: 66%;
+  transform: scale(var(--fit, 1));
+  transform-style: preserve-3d;
+}
+
+.stairs_scene {
+  --yaw: -44deg;
+  position: absolute;
+  transform: rotateX(58deg) rotateZ(var(--yaw));
+  transform-style: preserve-3d;
+}
+
+.stairs_block {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  transform-style: preserve-3d;
+}
+
+.stairs_top,
+.stairs_front,
+.stairs_riser,
+.stairs_cube-face {
+  position: absolute;
+  display: block;
+}
+
+.stairs_top {
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform: translateZ(var(--h));
+  background-color: #1a2849;
+  box-shadow: inset 0 0 0 1.5px #ffffffd9;
+}
+
+/* Flashes yellow when the cube lands (--flash is tweened 1 to 0). */
+.stairs_top::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: var(--_colors---primary--signal);
+  opacity: calc(var(--flash, 0) * 0.4);
+}
+
+.stairs_front {
+  left: 0;
+  top: 100%;
+  width: 100%;
+  height: var(--h);
+  transform-origin: top;
+  transform: rotateX(90deg);
+  background-color: #14213f;
+  box-shadow: inset 0 0 0 1.25px #ffffff80;
+}
+
+.stairs_riser {
+  left: 0;
+  top: 0;
+  width: var(--h);
+  height: 100%;
+  transform-origin: left;
+  transform: rotateY(-90deg);
+  background-color: #0f1a33;
+  box-shadow: inset 0 0 0 1.25px #ffffff99;
+}
+
+/* Labels turn against the sway so they stay level. */
+.stairs_label {
+  position: relative;
+  z-index: 1;
+  font-family: var(--_typography---font-family--detail);
+  font-size: 11px;
+  font-weight: var(--_typography---font-weight--medium);
+  color: #ffffffd9;
+  white-space: nowrap;
+  transform: rotate(calc(var(--yaw) * -1));
+}
+
+.stairs_block.is-last .stairs_top {
+  background-color: #22305a;
+  box-shadow: inset 0 0 0 2px var(--_colors---primary--signal);
+}
+
+.stairs_block.is-last .stairs_label {
+  color: var(--_colors---primary--signal);
+}
+
+.stairs_hopper,
+.stairs_shadow {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 16px;
+  height: 16px;
+  opacity: 0;
+}
+
+.stairs_hopper {
+  transform-style: preserve-3d;
+}
+
+.stairs_shadow {
+  border-radius: 50%;
+  background-color: #0000008c;
+  box-shadow: 0 0 8px 4px #0000008c;
+}
+
+.stairs_cube-face.is-top {
+  inset: 0;
+  transform: translateZ(16px);
+  background-color: var(--_colors---primary--signal);
+}
+
+.stairs_cube-face.is-front,
+.stairs_cube-face.is-back {
+  left: 0;
+  width: 100%;
+  height: 16px;
+  transform-origin: top;
+  transform: rotateX(90deg);
+  background-color: #e5ad22;
+}
+
+.stairs_cube-face.is-front {
+  top: 100%;
+}
+
+.stairs_cube-face.is-back {
+  top: 0;
+}
+
+.stairs_cube-face.is-left,
+.stairs_cube-face.is-right {
+  top: 0;
+  width: 16px;
+  height: 100%;
+  transform-origin: left;
+  transform: rotateY(-90deg);
+  background-color: #c99317;
+}
+
+.stairs_cube-face.is-left {
+  left: 0;
+}
+
+.stairs_cube-face.is-right {
+  left: 100%;
+}
+
+@media (max-width: 479px) {
+  .home-grid_pricing {
+    padding-bottom: 17rem;
+  }
+
+  .process-stairs.home-grid_pricing-img {
+    top: auto;
+    bottom: 0.5rem;
+    left: 9%;
+    right: auto;
+    width: 82%;
   }
 }
 
@@ -350,6 +722,49 @@ a.showreel_lightbox {
   }
 }
 
+/* Phones and tablets get the same grow-to-full-screen animation: undo the static layout webflow.css
+   sets below 992px (the animation itself lives in Showreel). */
+@media (max-width: 991px) and (prefers-reduced-motion: no-preference) {
+  .showreel_wrap {
+    height: 260svh;
+    padding: 0;
+  }
+
+  .showreel_sticky {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+  }
+
+  .showreel_lightbox {
+    aspect-ratio: auto;
+    width: 100vw;
+    height: 100svh;
+    padding: 0.75rem;
+  }
+
+  .showreel_img-wrap {
+    border-radius: 1.5rem;
+  }
+
+  .showreel_img {
+    width: 100vw;
+    min-width: 100vw;
+    height: 100svh;
+    min-height: 100svh;
+  }
+
+  .showreel_heading {
+    display: block;
+    font-size: 2rem;
+  }
+
+  .showreel_scroll-note {
+    display: block;
+    top: 3rem;
+  }
+}
+
 .video-modal {
   width: 100vw;
   max-width: none;
@@ -368,7 +783,7 @@ a.showreel_lightbox {
 }
 
 .video-modal::backdrop {
-  background-color: #000000d9;
+  background-color: #0e1a33d9;
   backdrop-filter: blur(12px);
 }
 
@@ -570,7 +985,7 @@ a.showreel_lightbox {
 
 /* Card backdrop for device mockups, tinted with the project colour. */
 .device-stage {
-  --showcase: #632f1b;
+  --showcase: #2c4bff;
   position: absolute;
   inset: 0;
   isolation: isolate;
@@ -578,7 +993,7 @@ a.showreel_lightbox {
   container-type: size;
   background:
     radial-gradient(60% 60% at 50% 35%, color-mix(in srgb, var(--showcase) 12%, #fff) 0%, #fff0 70%),
-    color-mix(in srgb, var(--showcase) 28%, #ebe8e2);
+    color-mix(in srgb, var(--showcase) 24%, #e3e8ef);
 }
 
 /* 1–3 phones rising from the bottom of a card. */
@@ -1118,7 +1533,7 @@ a:is(:hover, :focus-visible) .phone-showcase .is-right {
 .mac_lid-back {
   position: absolute;
   inset: 0;
-  border-radius: 2.4cqw 2.4cqw 0.8cqw 0.8cqw;
+  border-radius: 2.4cqw 2.4cqw 0.35cqw 0.35cqw;
   backface-visibility: hidden;
 }
 
@@ -1188,26 +1603,61 @@ a:is(:hover, :focus-visible) .phone-showcase .is-right {
   translate: -50% -50%;
 }
 
+/*
+ * The base, seen from the front like Apple's product shots: a thin aluminium slab (about 3.1% of its width
+ * tall) with a bright top edge, ends that darken as they round away, the thumb scoop cut into the top
+ * edge, two rubber feet showing underneath and a soft contact shadow. Its front edge is nearer the viewer
+ * than the hinge, so it sits in front of the lid and hides the lid's bottom edge and corners.
+ */
 .mac_base {
   position: relative;
+  z-index: 2;
   width: 100cqw;
-  height: 2.4cqw;
-  margin-top: -0.2cqw;
-  border-radius: 0.4cqw 0.4cqw 2.2cqw 2.2cqw / 0.4cqw 0.4cqw 1.6cqw 1.6cqw;
-  background: linear-gradient(180deg, #f2f2f4 0%, #d4d5d9 30%, #b7b8bd 70%, #8e8f94 100%);
+  height: 3.1cqw;
+  margin-top: -0.6cqw;
+  border-radius: 0.9cqw 0.9cqw 2cqw 2cqw / 0.7cqw 0.7cqw 1.7cqw 1.7cqw;
+  background:
+    linear-gradient(90deg, #00000038 0%, #0000000d 2.5%, #0000 7%, #0000 93%, #0000000d 97.5%, #00000038 100%),
+    linear-gradient(180deg, #ffffff 0%, #f4f4f6 5%, #b8b9be 9%, #d9dade 18%, #cbccd0 45%, #b1b2b7 75%, #8f9095 100%);
   box-shadow:
-    inset 0 0.15cqw 0 #fff,
-    0 1.6cqw 3cqw -1.2cqw #00000073;
+    inset 0 -0.14cqw 0 #77787d,
+    0 0.9cqw 1.2cqw -0.7cqw #00000059,
+    0 2.4cqw 3.2cqw -2cqw #00000047;
 }
 
+/* Rubber feet, just visible below each end. */
+.mac_base::before,
+.mac_base::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  bottom: -0.35cqw;
+  width: 4.5cqw;
+  height: 0.6cqw;
+  border-radius: 0 0 0.5cqw 0.5cqw / 0 0 0.4cqw 0.4cqw;
+  background: linear-gradient(180deg, #4a4b4f, #232326);
+}
+
+.mac_base::before {
+  left: 6.5cqw;
+}
+
+.mac_base::after {
+  right: 6.5cqw;
+}
+
+/* Thumb scoop: a shallow recess in the front edge that catches the light. */
 .mac_scoop {
   position: absolute;
   top: 0;
   left: 50%;
-  width: 15cqw;
-  height: 0.9cqw;
-  border-radius: 0 0 1.2cqw 1.2cqw;
-  background: linear-gradient(180deg, #9fa0a5, #cfd0d4);
+  width: 16cqw;
+  height: 1.15cqw;
+  border-radius: 0 0 1.1cqw 1.1cqw / 0 0 0.9cqw 0.9cqw;
+  background: linear-gradient(180deg, #8d8e93 0%, #bfc0c4 25%, #e9eaec 62%, #f6f6f7 100%);
+  box-shadow:
+    inset 0 0.12cqw 0.25cqw #00000059,
+    0 0.08cqw 0 #7d7e8380;
   translate: -50% 0;
 }
 
@@ -1459,7 +1909,7 @@ a:is(:hover, :focus-visible) .store-showcase_phone {
 /* ---------- Project page ---------- */
 
 .section_project {
-  --showcase: #632f1b;
+  --showcase: #2c4bff;
 }
 
 .project_back {
@@ -1488,7 +1938,7 @@ a:is(:hover, :focus-visible) .store-showcase_phone {
   border-radius: var(--border-radius--xlarge);
   background:
     radial-gradient(60% 60% at 50% 30%, color-mix(in srgb, var(--showcase) 12%, #fff) 0%, #fff0 70%),
-    color-mix(in srgb, var(--showcase) 28%, #ebe8e2);
+    color-mix(in srgb, var(--showcase) 24%, #e3e8ef);
   overflow: clip;
 }
 
@@ -1762,7 +2212,7 @@ a:is(:hover, :focus-visible) .store-showcase_phone {
   inset: 0;
   background:
     radial-gradient(60% 60% at 50% 35%, color-mix(in srgb, var(--showcase) 12%, #fff) 0%, #fff0 70%),
-    color-mix(in srgb, var(--showcase) 28%, #ebe8e2);
+    color-mix(in srgb, var(--showcase) 24%, #e3e8ef);
 }
 
 .device-full_stage {
@@ -2318,6 +2768,21 @@ a:is(:hover, :focus-visible) .store-showcase_phone {
   font-size: 1.75rem;
 }
 
+/* Selection-frame mark beside the name (echoes the hero's design-tool selection). */
+.navbar_mark {
+  width: 1.375rem;
+  height: 1.375rem;
+  color: var(--_colors---primary--black);
+}
+
+.navbar_mark .is-handle {
+  fill: var(--_colors---primary--paper);
+}
+
+.navbar_mark .is-accent {
+  fill: var(--_colors---primary--accent);
+}
+
 .brand_logo.wordmark {
   width: auto;
   color: var(--_colors---primary--white);
@@ -2345,6 +2810,186 @@ a:is(:hover, :focus-visible) .store-showcase_phone {
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem;
+}
+
+/* ---------- Blueprint artwork in place of template media ---------- */
+
+/* About card: a moving grainy gradient (AboutGlow, WebGL). These CSS colour fields and grain are the
+   fallback when WebGL 2 isn't available. */
+.home-about_glow {
+  position: absolute;
+  inset: -12%;
+  background-color: var(--_colors---primary--black);
+}
+
+.home-about_glow::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
+  opacity: 0.22;
+}
+
+.glow_field {
+  position: absolute;
+  inset: 0;
+}
+
+.glow_blob {
+  position: absolute;
+  width: 95%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  will-change: transform;
+}
+
+.glow_blob.is-cobalt {
+  top: 10%;
+  left: 2%;
+  background: radial-gradient(closest-side, #3355ff 0%, #2c4bffb3 42%, #2c4bff00 78%);
+  animation: glow-drift-a 19s ease-in-out infinite alternate;
+}
+
+.glow_blob.is-aqua {
+  top: -14%;
+  left: -16%;
+  width: 85%;
+  background: radial-gradient(closest-side, #3fe0ff 0%, #1fb6e880 40%, #1fb6e800 76%);
+  animation: glow-drift-b 23s ease-in-out infinite alternate;
+}
+
+.glow_blob.is-signal {
+  top: -8%;
+  right: -14%;
+  width: 80%;
+  background: radial-gradient(closest-side, #ffd34d 0%, #ff9f2e99 40%, #ff7a2e00 76%);
+  animation: glow-drift-c 17s ease-in-out infinite alternate;
+}
+
+.glow_blob.is-violet {
+  bottom: -22%;
+  left: 20%;
+  width: 90%;
+  background: radial-gradient(closest-side, #9466ff 0%, #6d3df080 42%, #6d3df000 76%);
+  animation: glow-drift-d 27s ease-in-out infinite alternate;
+}
+
+/* AboutGlow draws a WebGL gradient on this canvas; once it runs, the CSS fields and grain step aside. */
+.glow_canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.home-about_glow.is-webgl .glow_field,
+.home-about_glow.is-webgl::after {
+  display: none;
+}
+
+/* Phones: the card is wider than it is tall and the quote covers the middle, so the fields are
+   larger and spread to the corners instead of pooling in the centre. */
+@media (max-width: 767px) {
+  .glow_blob {
+    width: 120%;
+  }
+
+  .glow_blob.is-cobalt {
+    top: 5%;
+    left: -10%;
+  }
+
+  .glow_blob.is-aqua {
+    top: -30%;
+    left: -40%;
+    width: 110%;
+  }
+
+  .glow_blob.is-signal {
+    top: -30%;
+    right: -45%;
+    width: 105%;
+  }
+
+  .glow_blob.is-violet {
+    bottom: -45%;
+    left: 0%;
+    width: 120%;
+  }
+}
+
+@keyframes glow-drift-a {
+  to {
+    transform: translate(18%, -12%) scale(1.15);
+  }
+}
+
+@keyframes glow-drift-b {
+  to {
+    transform: translate(22%, 26%) scale(0.9);
+  }
+}
+
+@keyframes glow-drift-c {
+  to {
+    transform: translate(-24%, 20%) scale(1.2);
+  }
+}
+
+@keyframes glow-drift-d {
+  to {
+    transform: translate(-16%, -22%) scale(1.1);
+  }
+}
+
+/* Process card: the staircase stands on the card's bottom edge. */
+@media (min-width: 480px) {
+  .home-grid_pricing-img {
+    z-index: 1;
+    top: auto;
+    bottom: 0;
+    right: 4%;
+    width: 50%;
+  }
+}
+
+/* Contact card in the menu: the envelope plate fills the card. */
+.menu_contact-img {
+  object-fit: cover;
+}
+
+/* Contact section: a faint drafting grid fading out from the centre. */
+.cta_component {
+  background-image:
+    radial-gradient(60% 70% at 50% 50%, transparent 0%, var(--_colors---primary--black) 100%),
+    linear-gradient(#ffffff14 1px, transparent 1px),
+    linear-gradient(90deg, #ffffff14 1px, transparent 1px),
+    linear-gradient(#ffffff08 1px, transparent 1px),
+    linear-gradient(90deg, #ffffff08 1px, transparent 1px);
+  background-size: 100% 100%, 120px 120px, 120px 120px, 20px 20px, 20px 20px;
+  background-position: center;
+  background-repeat: no-repeat, repeat, repeat, repeat, repeat;
+}
+
+/* Below 992px the card's height is auto, and device showcases are absolutely positioned (no intrinsic
+   size), so without a width the card collapses to 0×0. Full width + 16:9 restores it. */
+@media (max-width: 991px) {
+  .work-list_link {
+    width: 100%;
+  }
+}
+
+/* Contact section trail: tech-stack logos as app-icon tiles instead of the template's photo cards. */
+.interaction_img {
+  aspect-ratio: 1;
+  width: 6.5rem;
+  min-width: 0;
+  /* The wrapper is 0px wide, so the base img max-width: 100% would collapse the tile. */
+  max-width: none;
+  border-radius: 1.6rem;
+  object-fit: contain;
+  box-shadow: 0 1.25rem 2.5rem #0000004d;
 }
 
 /* ---------- Footer contact ---------- */
@@ -2500,7 +3145,7 @@ a:is(:hover, :focus-visible) .store-showcase_phone {
 .journey-teaser_shade {
   position: absolute;
   inset: 0;
-  background-image: linear-gradient(180deg, #0000 20%, #000000d9);
+  background-image: linear-gradient(180deg, #0e1a3300 20%, #0e1a33d9);
 }
 
 .journey-teaser_content {
@@ -2612,7 +3257,7 @@ a:is(:hover, :focus-visible) .store-showcase_phone {
 
 .journey_card.is-active .journey_card-dot {
   transform: scale(1.2);
-  box-shadow: 0 0 0 6px #f3350c26;
+  box-shadow: 0 0 0 6px #2c4bff26;
 }
 
 .journey_card-inner {
@@ -2696,7 +3341,7 @@ a:is(:hover, :focus-visible) .store-showcase_phone {
   }
 }
 
-/* Desktop: pinned, sideways-scrolling timeline */
+/* Pinned, sideways-scrolling timeline (every screen size, with motion) */
 
 .is-horizontal .journey_pin {
   display: flex;
@@ -2733,7 +3378,7 @@ a:is(:hover, :focus-visible) .store-showcase_phone {
 }
 
 .journey_bg-year-text {
-  color: #ece9e2;
+  color: #dfe5ee;
   font-size: 32vw;
   font-weight: var(--_typography---font-weight--semibold);
   letter-spacing: -0.06em;
@@ -2889,6 +3534,43 @@ a:is(:hover, :focus-visible) .store-showcase_phone {
   color: var(--_colors---grey--400);
 }
 
+/* Phones and tablets: narrower cards (still centred first and last), a compact top bar and a
+   screen height that ignores the mobile browser's collapsing toolbars. */
+@media (max-width: 991px) {
+  .is-horizontal .journey_pin {
+    height: 100svh;
+    padding-top: 4.5rem;
+    padding-bottom: 1.25rem;
+  }
+
+  .is-horizontal .journey_topbar {
+    grid-template-columns: auto 1fr;
+    gap: 1.5rem;
+  }
+
+  .is-horizontal .journey_note {
+    display: none;
+  }
+
+  .is-horizontal .journey_track {
+    --card: min(30rem, 78vw);
+    gap: 1.25rem;
+    padding: 0 calc(50vw - var(--card) / 2);
+  }
+
+  .is-horizontal .journey_card {
+    width: var(--card);
+  }
+
+  .journey_bg-year-text {
+    font-size: 48vw;
+  }
+
+  .journey_tick-label {
+    font-size: 0.625rem;
+  }
+}
+
 /* ---------- Reduced motion ---------- */
 
 @media (prefers-reduced-motion: reduce) {
@@ -2898,15 +3580,20 @@ a:is(:hover, :focus-visible) .store-showcase_phone {
 
   .note-marquee_text,
   .brands_list,
-  .home-grid_circle-1,
-  .home-grid_circle-2,
-  .home-grid_member,
-  .home-grid_member-in,
   .home-header_contact-dot-scale,
   .button-secondary:hover .button_dot-scale,
   .journey_bg-year-text,
   .journey_counter-current,
-  .quote {
+  .quote,
+  .glow_blob {
+    animation: none;
+  }
+
+  /* The orbit stays tilted in 3D, just still. */
+  .home-grid_circle-1,
+  .home-grid_circle-2,
+  .home-grid_member,
+  .home-grid_member-in {
     animation: none;
   }
 }
